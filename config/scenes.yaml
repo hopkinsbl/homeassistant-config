@@ -1,0 +1,112 @@
+---
+# ============================================================================
+# AWAY SCENE - Leaving Home Magic Moment
+# ============================================================================
+# Purpose: Configure home devices to energy-saving and secure states when away
+# Activated by: leaving_home_magic_moment automation
+#
+# CUSTOMIZATION REQUIRED:
+# Replace ALL entity IDs below with your actual device entities
+# Find your entities: Developer Tools > States > Browse available entities
+#
+# VALIDATION CHECKLIST:
+# [ ] All entity IDs exist in your Home Assistant instance
+# [ ] Entity states are valid for each device type
+# [ ] Scene activates without errors: Developer Tools > Services > scene.turn_on
+# [ ] All devices reach their target states when scene is activated
+# [ ] Configuration validated: Developer Tools > YAML > Check Configuration
+#
+# TESTING NOTES:
+# 1. Activate scene manually: Developer Tools > Services > scene.turn_on > scene.away
+# 2. Verify each device changes to the specified state
+# 3. Check for errors in: Settings > System > Logs
+# 4. Review scene in UI: Settings > Automations & Scenes > Scenes > Away
+#
+# TIPS:
+# - Start with a minimal scene (just a few lights) and expand gradually
+# - Remove or comment out entities you don't have
+# - Add new entities as needed for your specific setup
+# - Use realistic values (e.g., temperature ranges appropriate for your climate)
+# ============================================================================
+
+- id: away_mode
+  name: "Away"
+  icon: mdi:home-export-outline
+  entities:
+    # ========================================================================
+    # LIGHTS - Turn off to save energy
+    # ========================================================================
+    # CUSTOMIZE: Replace with your actual light entity IDs
+    # Find lights: Developer Tools > States > Filter by "light."
+    # 
+    # VALIDATION: Verify each light entity exists before deploying
+    # TEST: Turn lights on, then activate scene to confirm they turn off
+    # ========================================================================
+    light.living_room: off      # CUSTOMIZE: Replace with your light entity
+    light.bedroom: off          # CUSTOMIZE: Replace with your light entity
+    light.kitchen: off          # CUSTOMIZE: Replace with your light entity
+    light.hallway: off          # CUSTOMIZE: Replace with your light entity
+    light.bathroom: off         # CUSTOMIZE: Replace with your light entity
+    
+    # OPTIONAL: Keep security/outdoor lights on when away
+    # light.front_porch:
+    #   state: on
+    #   brightness: 128
+    
+    # ========================================================================
+    # CLIMATE - Set to energy-saving temperature
+    # ========================================================================
+    # CUSTOMIZE: Replace with your actual thermostat entity ID
+    # Find climate devices: Developer Tools > States > Filter by "climate."
+    # 
+    # IMPORTANT: Adjust temperature based on:
+    #   - Your local climate (heating vs cooling)
+    #   - Season (winter vs summer)
+    #   - Personal comfort preferences
+    #   - Pet requirements if applicable
+    # 
+    # VALIDATION: Ensure hvac_mode is supported by your thermostat
+    # Common modes: "off", "heat", "cool", "auto", "heat_cool"
+    # TEST: Activate scene and verify thermostat adjusts correctly
+    # 
+    # NOTE: If you don't have a thermostat, comment out or remove this section
+    # ========================================================================
+    climate.thermostat:         # CUSTOMIZE: Replace with your thermostat entity
+      state: "auto"             # CUSTOMIZE: Choose appropriate mode for your system
+      temperature: 18           # CUSTOMIZE: Adjust for your climate (Celsius)
+    
+    # ========================================================================
+    # OPTIONAL: Additional devices to control when away
+    # ========================================================================
+    # Uncomment and customize any of the following based on your setup
+    # Find entities: Developer Tools > States > Filter by domain
+    # ========================================================================
+    
+    # SWITCHES - Turn off non-essential devices
+    # Find switches: Developer Tools > States > Filter by "switch."
+    # switch.coffee_maker: off
+    # switch.tv_power: off
+    # switch.desk_lamp: off
+    
+    # FANS - Turn off ventilation
+    # Find fans: Developer Tools > States > Filter by "fan."
+    # fan.bedroom_fan: off
+    # fan.living_room_fan: off
+    
+    # COVERS - Close blinds for privacy/security
+    # Find covers: Developer Tools > States > Filter by "cover."
+    # Valid states: "open", "closed", or position (0-100)
+    # cover.living_room_blinds: closed
+    # cover.bedroom_blinds: closed
+    
+    # LOCKS - Ensure doors are locked (if you have smart locks)
+    # Find locks: Developer Tools > States > Filter by "lock."
+    # lock.front_door: locked
+    # lock.back_door: locked
+    
+    # MEDIA PLAYERS - Ensure all are off (redundant with automation pause)
+    # Find media players: Developer Tools > States > Filter by "media_player."
+    # media_player.living_room_tv: off
+    
+    # VACUUM - Start cleaning when away (optional automation idea)
+    # vacuum.robot_vacuum: start

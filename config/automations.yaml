@@ -1,0 +1,640 @@
+- id: leaving_home_magic_moment
+  alias: Leaving Home Magic Moment
+  description: Triggered when both residents leave home - sends notifications, pauses
+    media, and activates Away scene
+  trigger:
+  - platform: zone
+    entity_id:
+    - device_tracker.person_1_phone
+    - device_tracker.person_2_phone
+    zone: zone.home
+    event: leave
+  condition:
+  - condition: state
+    entity_id: device_tracker.person_1_phone
+    state: not_home
+  - condition: state
+    entity_id: device_tracker.person_2_phone
+    state: not_home
+  action:
+  - service: notify.mobile_app_person_1_phone
+    data:
+      title: Leaving Home
+      message: "The mortals have left—activating defense mode \U0001F6E1️✨"
+      data:
+        priority: high
+        channel: home_automation
+    continue_on_error: true
+  - service: notify.mobile_app_person_2_phone
+    data:
+      title: Leaving Home
+      message: "The mortals have left—activating defense mode \U0001F6E1️✨"
+      data:
+        priority: high
+        channel: home_automation
+    continue_on_error: true
+  - service: media_player.media_pause
+    target:
+      entity_id: all
+    continue_on_error: true
+  - service: scene.turn_on
+    target:
+      entity_id: scene.away
+    continue_on_error: true
+  mode: single
+- id: morning_routine_bookish
+  alias: Morning Routine - Bookish
+  description: Triggered when Bookish takes first steps after 5 AM - delivers personalized
+    morning greeting
+  trigger:
+  - platform: state
+    entity_id: sensor.bookish_iphone_17_steps
+  condition:
+  - condition: time
+    after: 05:00:00
+    before: '11:00:00'
+  - condition: template
+    value_template: '{{ states(''sensor.bookish_iphone_17_steps'') not in [''unknown'',
+      ''unavailable''] }}'
+  - condition: template
+    value_template: '{{ states(''sensor.bookish_iphone_17_steps'') | int(0) > 10 }}'
+  - condition: template
+    value_template: '{% set last_triggered = state_attr(''automation.morning_routine_bookish'',
+      ''last_triggered'') %} {{ last_triggered is none or (now().date() > (last_triggered
+      | as_datetime | as_local).date()) }}
+
+      '
+  action:
+  - service: script.morning_greeting_bookish
+    data: {}
+  mode: single
+- id: morning_routine_jester
+  alias: Morning Routine - Jester
+  description: Triggered when Jester takes first steps after 5 AM - delivers personalized
+    morning greeting
+  trigger:
+  - platform: state
+    entity_id: sensor.bens_iphone_steps
+  condition:
+  - condition: time
+    after: 05:00:00
+    before: '11:00:00'
+  - condition: template
+    value_template: '{{ states(''sensor.bens_iphone_steps'') not in [''unknown'',
+      ''unavailable''] }}'
+  - condition: template
+    value_template: '{{ states(''sensor.bens_iphone_steps'') | int(0) > 10 }}'
+  - condition: template
+    value_template: '{% set last_triggered = state_attr(''automation.morning_routine_jester'',
+      ''last_triggered'') %} {{ last_triggered is none or (now().date() > (last_triggered
+      | as_datetime | as_local).date()) }}
+
+      '
+  action:
+  - service: script.morning_greeting_jester
+    data: {}
+  mode: single
+- id: welcome_home_bookish
+  alias: Welcome Home - Bookish
+  description: Triggered when Bookish arrives home - plays welcome playlist, sends
+    notification, and displays photo
+  trigger:
+  - platform: zone
+    entity_id: person.bookish
+    zone: zone.home
+    event: enter
+  condition:
+  - condition: state
+    entity_id: person.bookish
+    state: home
+  - condition: template
+    value_template: '{% set last_changed = states.person.bookish.last_changed %} {{
+      (now() - last_changed).total_seconds() > 1800 }}
+
+      '
+  action:
+  - service: script.welcome_home_bookish
+    data: {}
+  mode: single
+- id: welcome_home_jester
+  alias: Welcome Home - Jester
+  description: Triggered when Jester arrives home - plays welcome playlist, sends
+    notification, and displays photo
+  trigger:
+  - platform: zone
+    entity_id: person.jester
+    zone: zone.home
+    event: enter
+  condition:
+  - condition: state
+    entity_id: person.jester
+    state: home
+  - condition: template
+    value_template: '{% set last_changed = states.person.jester.last_changed %} {{
+      (now() - last_changed).total_seconds() > 1800 }}
+
+      '
+  action:
+  - service: script.welcome_home_jester
+    data: {}
+  mode: single
+- id: ai_summary_morning
+  alias: AI Summary - Morning
+  description: Generates AI summary at 7 AM daily
+  trigger:
+  - platform: time
+    at: 07:00:00
+  condition: []
+  action:
+  - service: script.generate_ai_summary
+    data: {}
+  - delay:
+      seconds: 5
+  - service: script.deliver_ai_summary_bookish
+    data: {}
+    continue_on_error: true
+  - service: script.deliver_ai_summary_jester
+    data: {}
+    continue_on_error: true
+  mode: single
+- id: ai_summary_home_arrival
+  alias: AI Summary - Home Arrival
+  description: Generates AI summary when both users arrive home
+  trigger:
+  - platform: zone
+    entity_id:
+    - person.bookish
+    - person.jester
+    zone: zone.home
+    event: enter
+  condition:
+  - condition: state
+    entity_id: person.bookish
+    state: home
+  - condition: state
+    entity_id: person.jester
+    state: home
+  - condition: template
+    value_template: '{% set last_changed = states.automation.ai_summary_home_arrival.attributes.last_triggered
+      %} {{ last_changed is none or (now() - last_changed).total_seconds() > 7200
+      }}
+
+      '
+  action:
+  - service: script.generate_ai_summary
+    data: {}
+  - delay:
+      seconds: 5
+  - service: script.deliver_ai_summary_bookish
+    data: {}
+    continue_on_error: true
+  - service: script.deliver_ai_summary_jester
+    data: {}
+    continue_on_error: true
+  mode: single
+- id: book_recommendation_daily
+  alias: Book Recommendation - Daily
+  description: Fetches and delivers daily book recommendation at 6 PM
+  trigger:
+  - platform: time
+    at: '18:00:00'
+  condition: []
+  action:
+  - service: script.fetch_book_recommendation
+    data: {}
+  - delay:
+      seconds: 3
+  - service: script.deliver_book_recommendation_bookish
+    data: {}
+    continue_on_error: true
+  - service: script.deliver_book_recommendation_jester
+    data: {}
+    continue_on_error: true
+  mode: single
+- id: book_recommendation_try_again_bookish
+  alias: Book Recommendation Try Again - Bookish
+  description: Handles Try Again action from Bookish's book recommendation notification
+  trigger:
+  - platform: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: BOOK_TRY_AGAIN
+  condition: []
+  action:
+  - service: script.fetch_book_recommendation
+    data: {}
+  - delay:
+      seconds: 3
+  - service: script.deliver_book_recommendation_bookish
+    data: {}
+  mode: single
+- id: book_recommendation_try_again_jester
+  alias: Book Recommendation Try Again - Jester
+  description: Handles Try Again action from Jester's book recommendation notification
+  trigger:
+  - platform: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: BOOK_TRY_AGAIN
+  condition: []
+  action:
+  - service: script.fetch_book_recommendation
+    data: {}
+  - delay:
+      seconds: 3
+  - service: script.deliver_book_recommendation_jester
+    data: {}
+  mode: single
+- id: countdown_celebration_trigger
+  alias: Countdown Celebration Trigger
+  description: Triggers celebration when any countdown reaches zero
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.countdown_important_date_1
+    - sensor.countdown_important_date_2
+    - sensor.countdown_important_date_3
+    to: '0'
+  condition:
+  - condition: template
+    value_template: '{{ trigger.to_state.state == ''0'' }}
+
+      '
+  action:
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.countdown_celebration_message
+    data:
+      value: "{% if trigger.entity_id == 'sensor.countdown_important_date_1' %}\n
+        \ \U0001F389 {{ states('input_text.important_date_1_name') }} is here! \U0001F38A\n{%
+        elif trigger.entity_id == 'sensor.countdown_important_date_2' %}\n  \U0001F389
+        {{ states('input_text.important_date_2_name') }} is here! \U0001F38A\n{% elif
+        trigger.entity_id == 'sensor.countdown_important_date_3' %}\n  \U0001F389
+        {{ states('input_text.important_date_3_name') }} is here! \U0001F38A\n{% else
+        %}\n  \U0001F389 A special day has arrived! \U0001F38A\n{% endif %}\n"
+  - service: input_datetime.set_datetime
+    target:
+      entity_id: input_datetime.countdown_celebration_timestamp
+    data:
+      datetime: '{{ now().isoformat() }}'
+  mode: queued
+  max: 5
+- id: countdown_celebration_clear
+  alias: Countdown Celebration Clear
+  description: Clears celebration message after 24 hours
+  trigger:
+  - platform: time_pattern
+    hours: '*'
+  condition:
+  - condition: template
+    value_template: '{{ states(''input_text.countdown_celebration_message'') != ''''
+      }}
+
+      '
+  - condition: template
+    value_template: "{% set timestamp = states('input_datetime.countdown_celebration_timestamp')
+      %} {% if timestamp not in ['unknown', 'unavailable', ''] %}\n  {% set celebration_time
+      = as_datetime(timestamp) %}\n  {{ (now() - celebration_time).total_seconds()
+      > 86400 }}\n{% else %}\n  false\n{% endif %}\n"
+  action:
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.countdown_celebration_message
+    data:
+      value: ''
+  mode: single
+- id: rotate_love_notes
+  alias: Rotate Love Notes
+  description: Rotates to a different love note every 4 hours
+  trigger:
+  - platform: time_pattern
+    hours: /4
+  condition: []
+  action:
+  - service: input_number.set_value
+    target:
+      entity_id: input_number.love_note_current_index
+    data:
+      value: '{% set current = states(''input_number.love_note_current_index'') |
+        int(1) %} {% set max_notes = 10 %} {{ (current % max_notes) + 1 }}
+
+        '
+  mode: single
+- id: bedroom_camera_privacy_on_arrival
+  alias: Bedroom Camera - Privacy ON (Arrival)
+  description: Enable bedroom camera privacy mode when anyone arrives home
+  triggers:
+  - entity_id: person.bookish
+    zone: zone.home
+    event: enter
+    trigger: zone
+  - entity_id: person.jester
+    zone: zone.home
+    event: enter
+    trigger: zone
+  conditions:
+  - condition: state
+    entity_id: input_boolean.guest_mode
+    state: 'off'
+  actions:
+  - delay:
+      minutes: 2
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: person.bookish
+      state: home
+    - condition: state
+      entity_id: person.jester
+      state: home
+  - target:
+      entity_id: switch.tapo_c210_bedroom_privacy
+    action: switch.turn_on
+  mode: restart
+- id: bedroom_camera_privacy_off_departure
+  alias: Bedroom Camera - Privacy OFF (Departure)
+  description: Disable bedroom camera privacy mode when everyone leaves home
+  trigger:
+  - platform: zone
+    entity_id:
+    - person.bookish
+    - person.jester
+    zone: zone.home
+    event: leave
+  condition:
+  - condition: state
+    entity_id: input_boolean.guest_mode
+    state: 'off'
+  action:
+  - delay:
+      minutes: 5
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: person.bookish
+      state: not_home
+    - condition: state
+      entity_id: person.jester
+      state: not_home
+  - service: switch.turn_off
+    target:
+      entity_id: switch.tapo_c210_bedroom_privacy
+  mode: restart
+- id: bedroom_camera_privacy_night_mode
+  alias: Bedroom Camera - Night Mode Privacy
+  description: Force bedroom privacy mode ON at night when anyone is home
+  trigger:
+  - platform: time
+    at: '22:00:00'
+  condition:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: person.bookish
+      state: home
+    - condition: state
+      entity_id: person.jester
+      state: home
+  - condition: state
+    entity_id: input_boolean.guest_mode
+    state: 'off'
+  action:
+  - service: switch.turn_on
+    target:
+      entity_id: switch.tapo_c210_bedroom_privacy
+  mode: single
+- id: all_cameras_motion_detection_away
+  alias: All Cameras - Motion Detection ON (Away)
+  description: Enable motion and pet detection on all cameras when everyone leaves
+  trigger:
+  - platform: zone
+    entity_id:
+    - person.bookish
+    - person.jester
+    zone: zone.home
+    event: leave
+  condition: []
+  action:
+  - delay:
+      minutes: 5
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: person.bookish
+      state: not_home
+    - condition: state
+      entity_id: person.jester
+      state: not_home
+  - service: notify.mobile_app_bookish_iphone_17
+    data:
+      title: "\U0001F3E0 Security Active"
+      message: All cameras are now monitoring for motion and pets
+      data:
+        priority: low
+        channel: camera_status
+    continue_on_error: true
+  - service: notify.mobile_app_bens_iphone
+    data:
+      title: "\U0001F3E0 Security Active"
+      message: All cameras are now monitoring for motion and pets
+      data:
+        priority: low
+        channel: camera_status
+    continue_on_error: true
+  mode: restart
+- id: all_cameras_motion_detection_home
+  alias: All Cameras - Motion Detection OFF (Home)
+  description: Disable pet detection alerts when anyone arrives home
+  triggers:
+  - entity_id:
+    - person.bookish
+    - person.jester
+    zone: zone.home
+    event: enter
+    trigger: zone
+  conditions: []
+  actions:
+  - delay:
+      minutes: 2
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: person.bookish
+      state: home
+    - condition: state
+      entity_id: person.jester
+      state: home
+  - action: camera.disable_motion_detection
+    metadata: {}
+    data: {}
+    target:
+      device_id:
+      - 3586092d5baa513ab8d349129920043d
+      - d7fcb73251fc79a9030826ae1d01634f
+      - a0f056f33f09f231e45744ad5b85ad51
+  mode: restart
+- id: camera_person_detected_alert
+  alias: Camera Alert - Person Detected (Away)
+  description: Send high-priority alert when person is detected and everyone is away
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.tapo_c210_bedroom_person_detected
+    - binary_sensor.tapo_c210_office_person_detected
+    - binary_sensor.tapo_c210_living_room_person_detected
+    to: 'on'
+  condition:
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: person.bookish
+      state: not_home
+    - condition: state
+      entity_id: person.jester
+      state: not_home
+  action:
+  - variables:
+      camera_name: "{% if trigger.entity_id == 'binary_sensor.tapo_c210_bedroom_person_detected'
+        %}\n  Bedroom\n{% elif trigger.entity_id == 'binary_sensor.tapo_c210_office_person_detected'
+        %}\n  Office\n{% elif trigger.entity_id == 'binary_sensor.tapo_c210_living_room_person_detected'
+        %}\n  Living Room\n{% else %}\n  Unknown\n{% endif %}\n"
+      camera_entity: "{% if trigger.entity_id == 'binary_sensor.tapo_c210_bedroom_person_detected'
+        %}\n  camera.tapo_c210_bedroom_hd_stream\n{% elif trigger.entity_id == 'binary_sensor.tapo_c210_office_person_detected'
+        %}\n  camera.tapo_c210_office_hd_stream\n{% elif trigger.entity_id == 'binary_sensor.tapo_c210_living_room_person_detected'
+        %}\n  camera.tapo_c210_living_room_hd_stream\n{% else %}\n  camera.tapo_c210_bedroom_hd_stream\n{%
+        endif %}\n"
+  - condition: state
+    entity_id: input_boolean.bookish_camera_alerts
+    state: 'on'
+  - service: notify.mobile_app_bookish_iphone_17
+    data:
+      title: "\U0001F6A8 Person Detected!"
+      message: Person detected in {{ camera_name }} while you're away
+      data:
+        priority: high
+        channel: camera_alerts
+        image: /api/camera_proxy/{{ camera_entity }}
+        actions:
+        - action: VIEW_CAMERA
+          title: View Camera
+        - action: SILENCE_ALERTS
+          title: Silence Alerts
+    continue_on_error: true
+  - condition: state
+    entity_id: input_boolean.jester_camera_alerts
+    state: 'on'
+  - service: notify.mobile_app_bens_iphone
+    data:
+      title: "\U0001F6A8 Person Detected!"
+      message: Person detected in {{ camera_name }} while you're away
+      data:
+        priority: high
+        channel: camera_alerts
+        image: /api/camera_proxy/{{ camera_entity }}
+        actions:
+        - action: VIEW_CAMERA
+          title: View Camera
+        - action: SILENCE_ALERTS
+          title: Silence Alerts
+    continue_on_error: true
+  mode: queued
+  max: 10
+- id: camera_motion_detected_alert
+  alias: Camera Alert - Motion Detected (Away)
+  description: Send medium-priority alert when motion is detected and everyone is
+    away
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.tapo_c210_bedroom_motion
+    - binary_sensor.tapo_c210_office_motion
+    - binary_sensor.tapo_c210_living_room_motion
+    to: 'on'
+  condition:
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: person.bookish
+      state: not_home
+    - condition: state
+      entity_id: person.jester
+      state: not_home
+  action:
+  - variables:
+      camera_name: "{% if trigger.entity_id == 'binary_sensor.tapo_c210_bedroom_motion'
+        %}\n  Bedroom\n{% elif trigger.entity_id == 'binary_sensor.tapo_c210_office_motion'
+        %}\n  Office\n{% elif trigger.entity_id == 'binary_sensor.tapo_c210_living_room_motion'
+        %}\n  Living Room\n{% else %}\n  Unknown\n{% endif %}\n"
+      camera_entity: "{% if trigger.entity_id == 'binary_sensor.tapo_c210_bedroom_motion'
+        %}\n  camera.tapo_c210_bedroom_hd_stream\n{% elif trigger.entity_id == 'binary_sensor.tapo_c210_office_motion'
+        %}\n  camera.tapo_c210_office_hd_stream\n{% elif trigger.entity_id == 'binary_sensor.tapo_c210_living_room_motion'
+        %}\n  camera.tapo_c210_living_room_hd_stream\n{% else %}\n  camera.tapo_c210_bedroom_hd_stream\n{%
+        endif %}\n"
+  - condition: state
+    entity_id: input_boolean.bookish_camera_alerts
+    state: 'on'
+  - service: notify.mobile_app_bookish_iphone_17
+    data:
+      title: "\U0001F440 Motion Detected"
+      message: Motion detected in {{ camera_name }}
+      data:
+        priority: default
+        channel: camera_alerts
+        image: /api/camera_proxy/{{ camera_entity }}
+        group: camera_motion
+    continue_on_error: true
+  - condition: state
+    entity_id: input_boolean.jester_camera_alerts
+    state: 'on'
+  - service: notify.mobile_app_bens_iphone
+    data:
+      title: "\U0001F440 Motion Detected"
+      message: Motion detected in {{ camera_name }}
+      data:
+        priority: default
+        channel: camera_alerts
+        image: /api/camera_proxy/{{ camera_entity }}
+        group: camera_motion
+    continue_on_error: true
+  mode: queued
+  max: 10
+- id: camera_alerts_silence_bookish
+  alias: Camera Alerts - Silence (Bookish)
+  description: Handle silence alerts action from Bookish's notifications
+  trigger:
+  - platform: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: SILENCE_ALERTS
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.bookish_camera_alerts
+  - service: notify.mobile_app_bookish_iphone_17
+    data:
+      title: "\U0001F515 Alerts Silenced"
+      message: Camera alerts disabled for Bookish. Re-enable in settings.
+      data:
+        priority: low
+  mode: single
+- id: camera_alerts_silence_jester
+  alias: Camera Alerts - Silence (Jester)
+  description: Handle silence alerts action from Jester's notifications
+  trigger:
+  - platform: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: SILENCE_ALERTS
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.jester_camera_alerts
+  - service: notify.mobile_app_bens_iphone
+    data:
+      title: "\U0001F515 Alerts Silenced"
+      message: Camera alerts disabled for Jester. Re-enable in settings.
+      data:
+        priority: low
+  mode: single

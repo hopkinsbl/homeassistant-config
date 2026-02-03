@@ -1,0 +1,1079 @@
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+# Calendar integration for Our Life Together Dashboard
+# Note: Configure Google Calendar through the UI (Settings > Devices & Services > Add Integration)
+# After adding Google Calendar, you can reference the calendar entities in your dashboards
+
+# Lovelace dashboards
+lovelace:
+  mode: storage
+  dashboards:
+    daily-rituals:
+      mode: yaml
+      title: Daily Rituals
+      icon: mdi:calendar-star
+      show_in_sidebar: true
+      filename: dashboards/daily_rituals.yaml
+    our-life-together:
+      mode: yaml
+      title: Our Life Together
+      icon: mdi:heart
+      show_in_sidebar: true
+      filename: dashboards/our_life_together.yaml
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+# Input datetime helpers for Our Life Together Dashboard
+input_datetime:
+  # Immigration Timeline Milestones
+  sharlene_arrival:
+    name: "Sharlene Arrival Date"
+    has_date: true
+    has_time: false
+  
+  visa_lodgement:
+    name: "Visa Lodgement Date"
+    has_date: true
+    has_time: false
+  
+  relationship_registration:
+    name: "Relationship Registration"
+    has_date: true
+    has_time: false
+  
+  temp_house_move:
+    name: "Temporary House Move"
+    has_date: true
+    has_time: false
+  
+  forever_home_build:
+    name: "Forever Home Build Start"
+    has_date: true
+    has_time: false
+  
+  # Relationship Journey Milestones - Relationship Category
+  milestone_first_date:
+    name: "First Date"
+    has_date: true
+    has_time: false
+  
+  milestone_first_road_trip:
+    name: "First Road Trip"
+    has_date: true
+    has_time: false
+  
+  milestone_first_kiss:
+    name: "First Kiss"
+    has_date: true
+    has_time: false
+  
+  milestone_said_i_love_you:
+    name: "Said I Love You"
+    has_date: true
+    has_time: false
+  
+  milestone_moved_in_together:
+    name: "Moved In Together"
+    has_date: true
+    has_time: false
+  
+  # Relationship Journey Milestones - Visa Category
+  milestone_visa_application:
+    name: "Visa Application Submitted"
+    has_date: true
+    has_time: false
+  
+  milestone_visa_approval:
+    name: "Visa Approval"
+    has_date: true
+    has_time: false
+  
+  # Relationship Journey Milestones - Housing Category
+  milestone_first_home_together:
+    name: "First Home Together"
+    has_date: true
+    has_time: false
+  
+  milestone_forever_home_purchase:
+    name: "Forever Home Purchase"
+    has_date: true
+    has_time: false
+  
+  # Custom Important Dates for Countdowns
+  important_date_1:
+    name: "Important Date 1"
+    has_date: true
+    has_time: false
+  
+  important_date_2:
+    name: "Important Date 2"
+    has_date: true
+    has_time: false
+  
+  important_date_3:
+    name: "Important Date 3"
+    has_date: true
+    has_time: false
+  
+  # Payment Tracker Due Dates
+  payment_1_due:
+    name: "Payment 1 Due Date"
+    has_date: true
+    has_time: false
+  
+  payment_2_due:
+    name: "Payment 2 Due Date"
+    has_date: true
+    has_time: false
+  
+  payment_3_due:
+    name: "Payment 3 Due Date"
+    has_date: true
+    has_time: false
+  
+  payment_4_due:
+    name: "Payment 4 Due Date"
+    has_date: true
+    has_time: false
+  
+  payment_5_due:
+    name: "Payment 5 Due Date"
+    has_date: true
+    has_time: false
+  
+  payment_6_due:
+    name: "Payment 6 Due Date"
+    has_date: true
+    has_time: false
+  
+  payment_7_due:
+    name: "Payment 7 Due Date"
+    has_date: true
+    has_time: false
+  
+  payment_8_due:
+    name: "Payment 8 Due Date"
+    has_date: true
+    has_time: false
+  
+  payment_9_due:
+    name: "Payment 9 Due Date"
+    has_date: true
+    has_time: false
+  
+  payment_10_due:
+    name: "Payment 10 Due Date"
+    has_date: true
+    has_time: false
+  
+  # Countdown Celebration Timestamp
+  countdown_celebration_timestamp:
+    name: "Countdown Celebration Timestamp"
+    has_date: true
+    has_time: true
+
+# Input boolean helpers for Our Life Together Dashboard
+input_boolean:
+  # Immigration Milestone Completion Tracking
+  milestone_sharlene_arrival:
+    name: "Sharlene Arrival Complete"
+    initial: false
+  
+  milestone_visa_lodgement:
+    name: "Visa Lodgement Complete"
+    initial: false
+  
+  milestone_relationship_registration:
+    name: "Relationship Registration Complete"
+    initial: false
+  
+  milestone_temp_house_move:
+    name: "Temporary House Move Complete"
+    initial: false
+  
+  # Camera Control Helpers
+  guest_mode:
+    name: "Guest Mode"
+    icon: mdi:account-multiple
+    initial: false
+  
+  bookish_camera_alerts:
+    name: "Bookish Camera Alerts"
+    icon: mdi:bell-alert
+    initial: true
+  
+  jester_camera_alerts:
+    name: "Jester Camera Alerts"
+    icon: mdi:bell-alert
+    initial: true
+  
+  milestone_forever_home_build:
+    name: "Forever Home Build Complete"
+    initial: false
+  
+  # Grocery List Item Checkboxes
+  grocery_item_1_checked:
+    name: "Grocery Item 1 Checked"
+    initial: false
+  grocery_item_2_checked:
+    name: "Grocery Item 2 Checked"
+    initial: false
+  grocery_item_3_checked:
+    name: "Grocery Item 3 Checked"
+    initial: false
+  grocery_item_4_checked:
+    name: "Grocery Item 4 Checked"
+    initial: false
+  grocery_item_5_checked:
+    name: "Grocery Item 5 Checked"
+    initial: false
+  grocery_item_6_checked:
+    name: "Grocery Item 6 Checked"
+    initial: false
+  grocery_item_7_checked:
+    name: "Grocery Item 7 Checked"
+    initial: false
+  grocery_item_8_checked:
+    name: "Grocery Item 8 Checked"
+    initial: false
+  grocery_item_9_checked:
+    name: "Grocery Item 9 Checked"
+    initial: false
+  grocery_item_10_checked:
+    name: "Grocery Item 10 Checked"
+    initial: false
+  grocery_item_11_checked:
+    name: "Grocery Item 11 Checked"
+    initial: false
+  grocery_item_12_checked:
+    name: "Grocery Item 12 Checked"
+    initial: false
+  grocery_item_13_checked:
+    name: "Grocery Item 13 Checked"
+    initial: false
+  grocery_item_14_checked:
+    name: "Grocery Item 14 Checked"
+    initial: false
+  grocery_item_15_checked:
+    name: "Grocery Item 15 Checked"
+    initial: false
+  grocery_item_16_checked:
+    name: "Grocery Item 16 Checked"
+    initial: false
+  grocery_item_17_checked:
+    name: "Grocery Item 17 Checked"
+    initial: false
+  grocery_item_18_checked:
+    name: "Grocery Item 18 Checked"
+    initial: false
+  grocery_item_19_checked:
+    name: "Grocery Item 19 Checked"
+    initial: false
+  grocery_item_20_checked:
+    name: "Grocery Item 20 Checked"
+    initial: false
+
+# Input number helpers for Our Life Together Dashboard
+input_number:
+  # Love Note Rotation Index
+  love_note_current_index:
+    name: "Current Love Note Index"
+    min: 1
+    max: 10
+    step: 1
+    initial: 1
+  
+  # Payment Amounts
+  payment_1_amount:
+    name: "Payment 1 Amount"
+    min: 0
+    max: 10000
+    step: 1
+    unit_of_measurement: "$"
+  
+  payment_2_amount:
+    name: "Payment 2 Amount"
+    min: 0
+    max: 10000
+    step: 1
+    unit_of_measurement: "$"
+  
+  payment_3_amount:
+    name: "Payment 3 Amount"
+    min: 0
+    max: 10000
+    step: 1
+    unit_of_measurement: "$"
+  
+  payment_4_amount:
+    name: "Payment 4 Amount"
+    min: 0
+    max: 10000
+    step: 1
+    unit_of_measurement: "$"
+  
+  payment_5_amount:
+    name: "Payment 5 Amount"
+    min: 0
+    max: 10000
+    step: 1
+    unit_of_measurement: "$"
+  
+  payment_6_amount:
+    name: "Payment 6 Amount"
+    min: 0
+    max: 10000
+    step: 1
+    unit_of_measurement: "$"
+  
+  payment_7_amount:
+    name: "Payment 7 Amount"
+    min: 0
+    max: 10000
+    step: 1
+    unit_of_measurement: "$"
+  
+  payment_8_amount:
+    name: "Payment 8 Amount"
+    min: 0
+    max: 10000
+    step: 1
+    unit_of_measurement: "$"
+  
+  payment_9_amount:
+    name: "Payment 9 Amount"
+    min: 0
+    max: 10000
+    step: 1
+    unit_of_measurement: "$"
+  
+  payment_10_amount:
+    name: "Payment 10 Amount"
+    min: 0
+    max: 10000
+    step: 1
+    unit_of_measurement: "$"
+
+# Input select helpers for Our Life Together Dashboard
+input_select:
+  # Reading List Status Tracking
+  reading_list_book_1_status:
+    name: "Book 1 Status"
+    options:
+      - "To Read"
+      - "Reading"
+      - "Completed"
+    initial: "To Read"
+  
+  reading_list_book_2_status:
+    name: "Book 2 Status"
+    options:
+      - "To Read"
+      - "Reading"
+      - "Completed"
+    initial: "To Read"
+  
+  reading_list_book_3_status:
+    name: "Book 3 Status"
+    options:
+      - "To Read"
+      - "Reading"
+      - "Completed"
+    initial: "To Read"
+  
+  reading_list_book_4_status:
+    name: "Book 4 Status"
+    options:
+      - "To Read"
+      - "Reading"
+      - "Completed"
+    initial: "To Read"
+  
+  reading_list_book_5_status:
+    name: "Book 5 Status"
+    options:
+      - "To Read"
+      - "Reading"
+      - "Completed"
+    initial: "To Read"
+  
+  reading_list_book_6_status:
+    name: "Book 6 Status"
+    options:
+      - "To Read"
+      - "Reading"
+      - "Completed"
+    initial: "To Read"
+  
+  reading_list_book_7_status:
+    name: "Book 7 Status"
+    options:
+      - "To Read"
+      - "Reading"
+      - "Completed"
+    initial: "To Read"
+  
+  reading_list_book_8_status:
+    name: "Book 8 Status"
+    options:
+      - "To Read"
+      - "Reading"
+      - "Completed"
+    initial: "To Read"
+  
+  reading_list_book_9_status:
+    name: "Book 9 Status"
+    options:
+      - "To Read"
+      - "Reading"
+      - "Completed"
+    initial: "To Read"
+  
+  reading_list_book_10_status:
+    name: "Book 10 Status"
+    options:
+      - "To Read"
+      - "Reading"
+      - "Completed"
+    initial: "To Read"
+
+# REST Commands for external API integrations
+rest_command:
+  # OpenAI API for AI-generated daily summaries
+  openai_summary:
+    url: "https://api.openai.com/v1/chat/completions"
+    method: POST
+    headers:
+      Authorization: !secret openai_api_key
+      Content-Type: "application/json"
+    payload: >
+      {
+        "model": "gpt-3.5-turbo",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are a helpful home assistant. Generate brief, friendly summaries that are warm and conversational."
+          },
+          {
+            "role": "user",
+            "content": "{{ prompt }}"
+          }
+        ],
+        "max_tokens": 200,
+        "temperature": 0.7
+      }
+    timeout: 10
+    content_type: "application/json"
+  
+  # Open Library API for book recommendations
+  get_book_recommendation:
+    url: "https://openlibrary.org/search.json?subject={{ genre }}&limit=50&language=eng"
+    method: GET
+    timeout: 10
+
+# Input text helpers for AI summary context storage
+input_text:
+  ai_weather_context:
+    name: "AI Weather Context"
+    max: 255
+    initial: ""
+  ai_calendar_context:
+    name: "AI Calendar Context"
+    max: 255
+    initial: ""
+  ai_summary_response:
+    name: "AI Summary Response"
+    max: 255
+    initial: ""
+  
+  # Book recommendation storage
+  book_recommendation_title:
+    name: "Book Recommendation Title"
+    max: 255
+    initial: ""
+  book_recommendation_author:
+    name: "Book Recommendation Author"
+    max: 255
+    initial: ""
+  book_recommendation_description:
+    name: "Book Recommendation Description"
+    max: 255
+    initial: ""
+  book_genre_preference:
+    name: "Book Genre Preference"
+    max: 100
+    initial: "fiction"
+  
+  # Our Life Together - Grocery List (20 items)
+  grocery_item_1:
+    name: "Grocery Item 1"
+    max: 100
+  grocery_item_2:
+    name: "Grocery Item 2"
+    max: 100
+  grocery_item_3:
+    name: "Grocery Item 3"
+    max: 100
+  grocery_item_4:
+    name: "Grocery Item 4"
+    max: 100
+  grocery_item_5:
+    name: "Grocery Item 5"
+    max: 100
+  grocery_item_6:
+    name: "Grocery Item 6"
+    max: 100
+  grocery_item_7:
+    name: "Grocery Item 7"
+    max: 100
+  grocery_item_8:
+    name: "Grocery Item 8"
+    max: 100
+  grocery_item_9:
+    name: "Grocery Item 9"
+    max: 100
+  grocery_item_10:
+    name: "Grocery Item 10"
+    max: 100
+  grocery_item_11:
+    name: "Grocery Item 11"
+    max: 100
+  grocery_item_12:
+    name: "Grocery Item 12"
+    max: 100
+  grocery_item_13:
+    name: "Grocery Item 13"
+    max: 100
+  grocery_item_14:
+    name: "Grocery Item 14"
+    max: 100
+  grocery_item_15:
+    name: "Grocery Item 15"
+    max: 100
+  grocery_item_16:
+    name: "Grocery Item 16"
+    max: 100
+  grocery_item_17:
+    name: "Grocery Item 17"
+    max: 100
+  grocery_item_18:
+    name: "Grocery Item 18"
+    max: 100
+  grocery_item_19:
+    name: "Grocery Item 19"
+    max: 100
+  grocery_item_20:
+    name: "Grocery Item 20"
+    max: 100
+  
+  # Our Life Together - Reading List (10 books)
+  reading_list_book_1:
+    name: "Reading List Book 1"
+    max: 150
+  reading_list_book_1_author:
+    name: "Reading List Book 1 Author"
+    max: 100
+  reading_list_book_2:
+    name: "Reading List Book 2"
+    max: 150
+  reading_list_book_2_author:
+    name: "Reading List Book 2 Author"
+    max: 100
+  reading_list_book_3:
+    name: "Reading List Book 3"
+    max: 150
+  reading_list_book_3_author:
+    name: "Reading List Book 3 Author"
+    max: 100
+  reading_list_book_4:
+    name: "Reading List Book 4"
+    max: 150
+  reading_list_book_4_author:
+    name: "Reading List Book 4 Author"
+    max: 100
+  reading_list_book_5:
+    name: "Reading List Book 5"
+    max: 150
+  reading_list_book_5_author:
+    name: "Reading List Book 5 Author"
+    max: 100
+  reading_list_book_6:
+    name: "Reading List Book 6"
+    max: 150
+  reading_list_book_6_author:
+    name: "Reading List Book 6 Author"
+    max: 100
+  reading_list_book_7:
+    name: "Reading List Book 7"
+    max: 150
+  reading_list_book_7_author:
+    name: "Reading List Book 7 Author"
+    max: 100
+  reading_list_book_8:
+    name: "Reading List Book 8"
+    max: 150
+  reading_list_book_8_author:
+    name: "Reading List Book 8 Author"
+    max: 100
+  reading_list_book_9:
+    name: "Reading List Book 9"
+    max: 150
+  reading_list_book_9_author:
+    name: "Reading List Book 9 Author"
+    max: 100
+  reading_list_book_10:
+    name: "Reading List Book 10"
+    max: 150
+  reading_list_book_10_author:
+    name: "Reading List Book 10 Author"
+    max: 100
+  
+  # Our Life Together - Payment Tracker (10 payments)
+  payment_1_name:
+    name: "Payment 1 Name"
+    max: 100
+  payment_2_name:
+    name: "Payment 2 Name"
+    max: 100
+  payment_3_name:
+    name: "Payment 3 Name"
+    max: 100
+  payment_4_name:
+    name: "Payment 4 Name"
+    max: 100
+  payment_5_name:
+    name: "Payment 5 Name"
+    max: 100
+  payment_6_name:
+    name: "Payment 6 Name"
+    max: 100
+  payment_7_name:
+    name: "Payment 7 Name"
+    max: 100
+  payment_8_name:
+    name: "Payment 8 Name"
+    max: 100
+  payment_9_name:
+    name: "Payment 9 Name"
+    max: 100
+  payment_10_name:
+    name: "Payment 10 Name"
+    max: 100
+  
+  # Our Life Together - Love Notes (10 notes)
+  love_note_1:
+    name: "Love Note 1"
+    max: 255
+    initial: "You make every day brighter ✨"
+  love_note_2:
+    name: "Love Note 2"
+    max: 255
+    initial: "Forever grateful for you 💕"
+  love_note_3:
+    name: "Love Note 3"
+    max: 255
+    initial: "Every moment with you is a treasure 💎"
+  love_note_4:
+    name: "Love Note 4"
+    max: 255
+    initial: "You're my favorite adventure 🌟"
+  love_note_5:
+    name: "Love Note 5"
+    max: 255
+    initial: "Together we can do anything 💪"
+  love_note_6:
+    name: "Love Note 6"
+    max: 255
+    initial: "You're the best part of my day 🌈"
+  love_note_7:
+    name: "Love Note 7"
+    max: 255
+    initial: "Building our forever, one day at a time 🏡"
+  love_note_8:
+    name: "Love Note 8"
+    max: 255
+    initial: "Your smile lights up my world 😊"
+  love_note_9:
+    name: "Love Note 9"
+    max: 255
+    initial: "So lucky to have you by my side 🍀"
+  love_note_10:
+    name: "Love Note 10"
+    max: 255
+    initial: "Our story is my favorite 📖"
+  
+  # Our Life Together - Custom Countdown Names
+  important_date_1_name:
+    name: "Important Date 1 Name"
+    max: 100
+    initial: "Special Event"
+  important_date_2_name:
+    name: "Important Date 2 Name"
+    max: 100
+    initial: "Special Event"
+  important_date_3_name:
+    name: "Important Date 3 Name"
+    max: 100
+    initial: "Special Event"
+  
+  # Countdown Celebration Message
+  countdown_celebration_message:
+    name: "Countdown Celebration Message"
+    max: 255
+    initial: ""
+
+# Template sensors for daily rituals and Our Life Together Dashboard
+template:
+  - sensor:
+      # Track Bookish's daily step count to detect when out of bed
+      - name: "Bookish Daily Steps"
+        unique_id: bookish_daily_steps
+        state: >
+          {% set steps = states('sensor.bookish_iphone_17_steps') | int(0) %}
+          {{ steps }}
+        unit_of_measurement: "steps"
+        icon: mdi:walk
+      
+      # Track Jester's daily step count to detect when out of bed
+      - name: "Jester Daily Steps"
+        unique_id: jester_daily_steps
+        state: >
+          {% set steps = states('sensor.bens_iphone_steps') | int(0) %}
+          {{ steps }}
+        unit_of_measurement: "steps"
+        icon: mdi:walk
+      
+      # Immigration Timeline Progress Calculation
+      - name: "Immigration Progress"
+        unique_id: immigration_progress
+        state: >
+          {% set total_milestones = 5 %}
+          {% set completed = [
+            states('input_boolean.milestone_sharlene_arrival'),
+            states('input_boolean.milestone_visa_lodgement'),
+            states('input_boolean.milestone_relationship_registration'),
+            states('input_boolean.milestone_temp_house_move'),
+            states('input_boolean.milestone_forever_home_build')
+          ] | select('eq', 'on') | list | count %}
+          {{ (completed / total_milestones * 100) | round(0) }}
+        unit_of_measurement: "%"
+        icon: mdi:progress-check
+      
+      # Next Immigration Milestone
+      - name: "Next Immigration Milestone"
+        unique_id: next_immigration_milestone
+        state: >
+          {% set milestones = [
+            {'name': 'Sharlene Arrival', 'date': states('input_datetime.sharlene_arrival'), 'complete': states('input_boolean.milestone_sharlene_arrival')},
+            {'name': 'Visa Lodgement', 'date': states('input_datetime.visa_lodgement'), 'complete': states('input_boolean.milestone_visa_lodgement')},
+            {'name': 'Relationship Registration', 'date': states('input_datetime.relationship_registration'), 'complete': states('input_boolean.milestone_relationship_registration')},
+            {'name': 'Temporary House Move', 'date': states('input_datetime.temp_house_move'), 'complete': states('input_boolean.milestone_temp_house_move')},
+            {'name': 'Forever Home Build', 'date': states('input_datetime.forever_home_build'), 'complete': states('input_boolean.milestone_forever_home_build')}
+          ] %}
+          {% set incomplete = milestones | selectattr('complete', 'eq', 'off') | list %}
+          {% if incomplete | length > 0 %}
+            {% set next = incomplete | sort(attribute='date') | first %}
+            {{ next.name }}
+          {% else %}
+            All milestones complete!
+          {% endif %}
+        icon: mdi:flag-checkered
+      
+      # Days Until Next Immigration Milestone
+      - name: "Days Until Next Immigration Milestone"
+        unique_id: days_until_next_immigration_milestone
+        state: >
+          {% set milestones = [
+            {'name': 'Sharlene Arrival', 'date': states('input_datetime.sharlene_arrival'), 'complete': states('input_boolean.milestone_sharlene_arrival')},
+            {'name': 'Visa Lodgement', 'date': states('input_datetime.visa_lodgement'), 'complete': states('input_boolean.milestone_visa_lodgement')},
+            {'name': 'Relationship Registration', 'date': states('input_datetime.relationship_registration'), 'complete': states('input_boolean.milestone_relationship_registration')},
+            {'name': 'Temporary House Move', 'date': states('input_datetime.temp_house_move'), 'complete': states('input_boolean.milestone_temp_house_move')},
+            {'name': 'Forever Home Build', 'date': states('input_datetime.forever_home_build'), 'complete': states('input_boolean.milestone_forever_home_build')}
+          ] %}
+          {% set incomplete = milestones | selectattr('complete', 'eq', 'off') | list %}
+          {% if incomplete | length > 0 %}
+            {% set next = incomplete | sort(attribute='date') | first %}
+            {% if next.date not in ['unknown', 'unavailable', ''] %}
+              {% set days = (as_datetime(next.date) - now()).days %}
+              {{ days if days >= 0 else 0 }}
+            {% else %}
+              Not set
+            {% endif %}
+          {% else %}
+            0
+          {% endif %}
+        unit_of_measurement: "days"
+        icon: mdi:calendar-clock
+      
+      # Payday Countdown - Calculates days until next payday (15th of month)
+      - name: "Days Until Payday"
+        unique_id: days_until_payday
+        state: >
+          {% set today = now().day %}
+          {% set payday = 15 %}
+          {% if today < payday %}
+            {{ payday - today }}
+          {% else %}
+            {% set next_month = now().replace(day=1) + timedelta(days=32) %}
+            {% set next_payday = next_month.replace(day=payday) %}
+            {{ (next_payday - now()).days }}
+          {% endif %}
+        unit_of_measurement: "days"
+        icon: mdi:cash-multiple
+      
+      # Custom Countdown 1
+      - name: "Countdown Important Date 1"
+        unique_id: countdown_important_date_1
+        state: >
+          {% set date = states('input_datetime.important_date_1') %}
+          {% if date not in ['unknown', 'unavailable', ''] %}
+            {% set days = (as_datetime(date) - now()).days %}
+            {{ days if days >= 0 else 0 }}
+          {% else %}
+            Not set
+          {% endif %}
+        unit_of_measurement: "days"
+        icon: mdi:calendar-star
+      
+      # Custom Countdown 2
+      - name: "Countdown Important Date 2"
+        unique_id: countdown_important_date_2
+        state: >
+          {% set date = states('input_datetime.important_date_2') %}
+          {% if date not in ['unknown', 'unavailable', ''] %}
+            {% set days = (as_datetime(date) - now()).days %}
+            {{ days if days >= 0 else 0 }}
+          {% else %}
+            Not set
+          {% endif %}
+        unit_of_measurement: "days"
+        icon: mdi:calendar-star
+      
+      # Custom Countdown 3
+      - name: "Countdown Important Date 3"
+        unique_id: countdown_important_date_3
+        state: >
+          {% set date = states('input_datetime.important_date_3') %}
+          {% if date not in ['unknown', 'unavailable', ''] %}
+            {% set days = (as_datetime(date) - now()).days %}
+            {{ days if days >= 0 else 0 }}
+          {% else %}
+            Not set
+          {% endif %}
+        unit_of_measurement: "days"
+        icon: mdi:calendar-star
+      
+      # Payment Tracker - Days Until Due (10 payments)
+      - name: "Days Until Payment 1"
+        unique_id: days_until_payment_1
+        state: >
+          {% set date = states('input_datetime.payment_1_due') %}
+          {% if date not in ['unknown', 'unavailable', ''] %}
+            {% set days = (as_datetime(date) - now()).days %}
+            {{ days if days >= 0 else 'Overdue' }}
+          {% else %}
+            Not set
+          {% endif %}
+        unit_of_measurement: "days"
+        icon: mdi:cash-clock
+      
+      - name: "Days Until Payment 2"
+        unique_id: days_until_payment_2
+        state: >
+          {% set date = states('input_datetime.payment_2_due') %}
+          {% if date not in ['unknown', 'unavailable', ''] %}
+            {% set days = (as_datetime(date) - now()).days %}
+            {{ days if days >= 0 else 'Overdue' }}
+          {% else %}
+            Not set
+          {% endif %}
+        unit_of_measurement: "days"
+        icon: mdi:cash-clock
+      
+      - name: "Days Until Payment 3"
+        unique_id: days_until_payment_3
+        state: >
+          {% set date = states('input_datetime.payment_3_due') %}
+          {% if date not in ['unknown', 'unavailable', ''] %}
+            {% set days = (as_datetime(date) - now()).days %}
+            {{ days if days >= 0 else 'Overdue' }}
+          {% else %}
+            Not set
+          {% endif %}
+        unit_of_measurement: "days"
+        icon: mdi:cash-clock
+      
+      - name: "Days Until Payment 4"
+        unique_id: days_until_payment_4
+        state: >
+          {% set date = states('input_datetime.payment_4_due') %}
+          {% if date not in ['unknown', 'unavailable', ''] %}
+            {% set days = (as_datetime(date) - now()).days %}
+            {{ days if days >= 0 else 'Overdue' }}
+          {% else %}
+            Not set
+          {% endif %}
+        unit_of_measurement: "days"
+        icon: mdi:cash-clock
+      
+      - name: "Days Until Payment 5"
+        unique_id: days_until_payment_5
+        state: >
+          {% set date = states('input_datetime.payment_5_due') %}
+          {% if date not in ['unknown', 'unavailable', ''] %}
+            {% set days = (as_datetime(date) - now()).days %}
+            {{ days if days >= 0 else 'Overdue' }}
+          {% else %}
+            Not set
+          {% endif %}
+        unit_of_measurement: "days"
+        icon: mdi:cash-clock
+      
+      - name: "Days Until Payment 6"
+        unique_id: days_until_payment_6
+        state: >
+          {% set date = states('input_datetime.payment_6_due') %}
+          {% if date not in ['unknown', 'unavailable', ''] %}
+            {% set days = (as_datetime(date) - now()).days %}
+            {{ days if days >= 0 else 'Overdue' }}
+          {% else %}
+            Not set
+          {% endif %}
+        unit_of_measurement: "days"
+        icon: mdi:cash-clock
+      
+      - name: "Days Until Payment 7"
+        unique_id: days_until_payment_7
+        state: >
+          {% set date = states('input_datetime.payment_7_due') %}
+          {% if date not in ['unknown', 'unavailable', ''] %}
+            {% set days = (as_datetime(date) - now()).days %}
+            {{ days if days >= 0 else 'Overdue' }}
+          {% else %}
+            Not set
+          {% endif %}
+        unit_of_measurement: "days"
+        icon: mdi:cash-clock
+      
+      - name: "Days Until Payment 8"
+        unique_id: days_until_payment_8
+        state: >
+          {% set date = states('input_datetime.payment_8_due') %}
+          {% if date not in ['unknown', 'unavailable', ''] %}
+            {% set days = (as_datetime(date) - now()).days %}
+            {{ days if days >= 0 else 'Overdue' }}
+          {% else %}
+            Not set
+          {% endif %}
+        unit_of_measurement: "days"
+        icon: mdi:cash-clock
+      
+      - name: "Days Until Payment 9"
+        unique_id: days_until_payment_9
+        state: >
+          {% set date = states('input_datetime.payment_9_due') %}
+          {% if date not in ['unknown', 'unavailable', ''] %}
+            {% set days = (as_datetime(date) - now()).days %}
+            {{ days if days >= 0 else 'Overdue' }}
+          {% else %}
+            Not set
+          {% endif %}
+        unit_of_measurement: "days"
+        icon: mdi:cash-clock
+      
+      - name: "Days Until Payment 10"
+        unique_id: days_until_payment_10
+        state: >
+          {% set date = states('input_datetime.payment_10_due') %}
+          {% if date not in ['unknown', 'unavailable', ''] %}
+            {% set days = (as_datetime(date) - now()).days %}
+            {{ days if days >= 0 else 'Overdue' }}
+          {% else %}
+            Not set
+          {% endif %}
+        unit_of_measurement: "days"
+        icon: mdi:cash-clock
+      
+      # Current Love Note Display
+      - name: "Current Love Note"
+        unique_id: current_love_note
+        state: >
+          {% set index = states('input_number.love_note_current_index') | int(1) %}
+          {{ states('input_text.love_note_' ~ index) }}
+        icon: mdi:heart-multiple
+      
+      # Relationship Journey - Days Since Sharlene Arrived
+      - name: "Days Since Sharlene Arrived"
+        unique_id: days_since_sharlene_arrived
+        state: >
+          {% set arrival_date = states('input_datetime.sharlene_arrival') %}
+          {% if arrival_date not in ['unknown', 'unavailable', ''] %}
+            {{ (now() - as_datetime(arrival_date)).days }}
+          {% else %}
+            Not set
+          {% endif %}
+        unit_of_measurement: "days"
+        icon: mdi:calendar-heart
+      
+      # Relationship Journey - Next Milestone
+      - name: "Next Relationship Milestone"
+        unique_id: next_relationship_milestone
+        state: >
+          {% set milestones = [
+            {'name': 'Visa Application', 'date': states('input_datetime.milestone_visa_application')},
+            {'name': 'Visa Approval', 'date': states('input_datetime.milestone_visa_approval')},
+            {'name': 'Moved In Together', 'date': states('input_datetime.milestone_moved_in_together')},
+            {'name': 'First Home Together', 'date': states('input_datetime.milestone_first_home_together')},
+            {'name': 'Forever Home Purchase', 'date': states('input_datetime.milestone_forever_home_purchase')}
+          ] %}
+          {% set upcoming = [] %}
+          {% for milestone in milestones %}
+            {% if milestone.date not in ['unknown', 'unavailable', ''] %}
+              {% if as_datetime(milestone.date) > now() %}
+                {% set upcoming = upcoming + [milestone] %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+          {% if upcoming | length > 0 %}
+            {% set next = upcoming | sort(attribute='date') | first %}
+            {{ next.name }}
+          {% else %}
+            No upcoming milestones
+          {% endif %}
+        icon: mdi:flag-variant
+      
+      # Relationship Journey - Days Until Next Milestone
+      - name: "Days Until Next Relationship Milestone"
+        unique_id: days_until_next_relationship_milestone
+        state: >
+          {% set milestones = [
+            {'name': 'Visa Application', 'date': states('input_datetime.milestone_visa_application')},
+            {'name': 'Visa Approval', 'date': states('input_datetime.milestone_visa_approval')},
+            {'name': 'Moved In Together', 'date': states('input_datetime.milestone_moved_in_together')},
+            {'name': 'First Home Together', 'date': states('input_datetime.milestone_first_home_together')},
+            {'name': 'Forever Home Purchase', 'date': states('input_datetime.milestone_forever_home_purchase')}
+          ] %}
+          {% set upcoming = [] %}
+          {% for milestone in milestones %}
+            {% if milestone.date not in ['unknown', 'unavailable', ''] %}
+              {% if as_datetime(milestone.date) > now() %}
+                {% set upcoming = upcoming + [milestone] %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+          {% if upcoming | length > 0 %}
+            {% set next = upcoming | sort(attribute='date') | first %}
+            {{ (as_datetime(next.date) - now()).days }}
+          {% else %}
+            0
+          {% endif %}
+        unit_of_measurement: "days"
+        icon: mdi:calendar-clock

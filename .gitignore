@@ -1,0 +1,29 @@
+# HomeAssistant Files to Exclude from Version Control
+
+# Database files
+*.db
+*.db-shm
+*.db-wal
+
+# Storage files contain secrets and tokens
+.storage/
+
+# Log files  
+*.log
+*.log.*
+
+# UUID file (unique per instance)
+.uuid
+
+# Cloud files
+.cloud/
+
+# Temporary files
+.*_temp*
+.HA_VERSION
+
+# Secrets (use secrets_template.yaml instead)
+secrets.yaml
+
+# Known password file
+known_devices.yaml

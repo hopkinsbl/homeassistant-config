@@ -1,0 +1,406 @@
+morning_greeting_bookish:
+  alias: Morning Greeting - Bookish
+  description: Delivers complete personalized morning routine for Bookish
+  sequence:
+  - service: script.weather_notification_bookish
+    data: {}
+    continue_on_error: true
+  - service: script.calendar_notification_bookish
+    data: {}
+    continue_on_error: true
+  - service: script.morning_playlist_bookish
+    data: {}
+    continue_on_error: true
+  mode: single
+morning_greeting_jester:
+  alias: Morning Greeting - Jester
+  description: Delivers complete personalized morning routine for Jester
+  sequence:
+  - service: script.weather_notification_jester
+    data: {}
+    continue_on_error: true
+  - service: script.calendar_notification_jester
+    data: {}
+    continue_on_error: true
+  - service: script.morning_playlist_jester
+    data: {}
+    continue_on_error: true
+  mode: single
+weather_notification_bookish:
+  alias: Weather Notification - Bookish
+  description: Sends current weather summary to Bookish's mobile device
+  sequence:
+  - action: notify.mobile_app_bookish_iphone_17
+    data:
+      title: ☀️ Morning Weather
+      message: '{{ states(''weather.home'') | title }} and {{ state_attr(''weather.home'',
+        ''temperature'') }}°C. {% if state_attr(''weather.home'', ''forecast'') %}
+        High: {{ state_attr(''weather.home'', ''forecast'')[0].temperature }}°C. {%
+        endif %} Have a great day!'
+    continue_on_error: true
+  mode: single
+weather_notification_jester:
+  alias: Weather Notification - Jester
+  description: Sends current weather summary to Jester's mobile device
+  sequence:
+  - action: notify.mobile_app_bens_iphone
+    data:
+      title: ☀️ Morning Weather
+      message: '{{ states(''weather.home'') | title }} and {{ state_attr(''weather.home'',
+        ''temperature'') }}°C. {% if state_attr(''weather.home'', ''forecast'') %}
+        High: {{ state_attr(''weather.home'', ''forecast'')[0].temperature }}°C. {%
+        endif %} Have a great day!'
+    continue_on_error: true
+  mode: single
+calendar_notification_bookish:
+  alias: Calendar Notification - Bookish
+  description: Sends next calendar event to Bookish's mobile device
+  sequence:
+  - action: notify.mobile_app_bookish_iphone_17
+    data:
+      title: "\U0001F4C5 Today's Schedule"
+      message: '{% if is_state(''calendar.shared_calendar'', ''on'') %} Next: {{ state_attr(''calendar.shared_calendar'',
+        ''message'') }} at {{ state_attr(''calendar.shared_calendar'', ''start_time'')
+        | as_timestamp | timestamp_custom(''%I:%M %p'') }} {% if state_attr(''calendar.shared_calendar'',
+        ''location'') %} Location: {{ state_attr(''calendar.shared_calendar'', ''location'')
+        }} {% endif %} {% else %} No events scheduled for today. Enjoy your free time!
+        {% endif %}'
+    continue_on_error: true
+  mode: single
+calendar_notification_jester:
+  alias: Calendar Notification - Jester
+  description: Sends next calendar event to Jester's mobile device
+  sequence:
+  - action: notify.mobile_app_bens_iphone
+    data:
+      title: "\U0001F4C5 Today's Schedule"
+      message: '{% if is_state(''calendar.shared_calendar'', ''on'') %} Next: {{ state_attr(''calendar.shared_calendar'',
+        ''message'') }} at {{ state_attr(''calendar.shared_calendar'', ''start_time'')
+        | as_timestamp | timestamp_custom(''%I:%M %p'') }} {% if state_attr(''calendar.shared_calendar'',
+        ''location'') %} Location: {{ state_attr(''calendar.shared_calendar'', ''location'')
+        }} {% endif %} {% else %} No events scheduled for today. Enjoy your free time!
+        {% endif %}'
+    continue_on_error: true
+  mode: single
+morning_playlist_bookish:
+  alias: Morning Playlist - Bookish
+  description: Starts morning playlist for Bookish
+  sequence:
+  - service: media_player.play_media
+    target:
+      entity_id: media_player.living_room_speaker
+    data:
+      media_content_id: spotify:playlist:37i9dQZF1DXcBWIGoYBM5M
+      media_content_type: playlist
+    continue_on_error: true
+  mode: single
+morning_playlist_jester:
+  alias: Morning Playlist - Jester
+  description: Starts morning playlist for Jester
+  sequence:
+  - service: media_player.play_media
+    target:
+      entity_id: media_player.living_room_speaker
+    data:
+      media_content_id: spotify:playlist:37i9dQZF1DXcBWIGoYBM5M
+      media_content_type: playlist
+    continue_on_error: true
+  mode: single
+welcome_home_bookish:
+  alias: Welcome Home - Bookish
+  description: Delivers complete welcome home experience for Bookish
+  sequence:
+  - service: script.welcome_playlist_bookish
+    data: {}
+    continue_on_error: true
+  - service: script.welcome_notification_bookish
+    data: {}
+    continue_on_error: true
+  - service: script.welcome_photo_display_bookish
+    data: {}
+    continue_on_error: true
+  mode: single
+welcome_home_jester:
+  alias: Welcome Home - Jester
+  description: Delivers complete welcome home experience for Jester
+  sequence:
+  - service: script.welcome_playlist_jester
+    data: {}
+    continue_on_error: true
+  - service: script.welcome_notification_jester
+    data: {}
+    continue_on_error: true
+  - service: script.welcome_photo_display_jester
+    data: {}
+    continue_on_error: true
+  mode: single
+welcome_playlist_bookish:
+  alias: Welcome Playlist - Bookish
+  description: Starts welcome home playlist for Bookish with volume control
+  sequence:
+  - target:
+      entity_id: media_player.living_room_speaker
+    data:
+      volume_level: 0.4
+    continue_on_error: true
+    action: media_player.volume_set
+    enabled: false
+  - target:
+      entity_id: media_player.living_room_speaker
+    data:
+      media:
+        media_content_id: spotify:playlist:37i9dQZF1DX4sWSpwq3LiO
+        media_content_type: playlist
+        metadata: {}
+    continue_on_error: true
+    action: media_player.play_media
+    enabled: false
+  mode: single
+welcome_playlist_jester:
+  alias: Welcome Playlist - Jester
+  description: Starts welcome home playlist for Jester with volume control
+  sequence:
+  - target:
+      entity_id: media_player.living_room_speaker
+    data:
+      volume_level: 0.4
+    continue_on_error: true
+    action: media_player.volume_set
+    enabled: false
+  - target:
+      entity_id: media_player.living_room_speaker
+    data:
+      media:
+        media_content_id: spotify:playlist:37i9dQZF1DX4sWSpwq3LiO
+        media_content_type: playlist
+        metadata: {}
+    continue_on_error: true
+    action: media_player.play_media
+    enabled: false
+  mode: single
+welcome_notification_bookish:
+  alias: Welcome Notification - Bookish
+  description: Sends personalized welcome home notification to Bookish's mobile device
+  sequence:
+  - action: notify.mobile_app_bookish_iphone_17
+    data:
+      title: "\U0001F3E1 Welcome Home!"
+      message: "Welcome back, Bookish! \U0001F389 The house missed you. Time to relax
+        and unwind! ✨"
+    continue_on_error: true
+  mode: single
+welcome_notification_jester:
+  alias: Welcome Notification - Jester
+  description: Sends personalized welcome home notification to Jester's mobile device
+  sequence:
+  - action: notify.mobile_app_bens_iphone
+    data:
+      title: "\U0001F3E1 Welcome Home!"
+      message: "Welcome back, Jester! \U0001F389 The house missed you. Time to relax
+        and unwind! ✨"
+    continue_on_error: true
+  mode: single
+welcome_photo_display_bookish:
+  alias: Welcome Photo Display - Bookish
+  description: Displays welcome photo on Chromecast for Bookish
+  sequence:
+  - service: media_player.play_media
+    target:
+      entity_id: media_player.living_room_tv
+    data:
+      media_content_id: https://example.com/couple_photo.jpg
+      media_content_type: image/jpeg
+    continue_on_error: true
+  mode: single
+welcome_photo_display_jester:
+  alias: Welcome Photo Display - Jester
+  description: Displays welcome photo on Chromecast for Jester
+  sequence:
+  - service: media_player.play_media
+    target:
+      entity_id: media_player.living_room_tv
+    data:
+      media_content_id: https://example.com/couple_photo.jpg
+      media_content_type: image/jpeg
+    continue_on_error: true
+  mode: single
+gather_ai_context:
+  alias: Gather AI Context
+  description: Fetches weather and calendar data to build context for AI summary
+  sequence:
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.ai_weather_context
+    data:
+      value: '{% set weather_state = states(''weather.home'') %} {% set temp = state_attr(''weather.home'',
+        ''temperature'') %} {% set forecast = state_attr(''weather.home'', ''forecast'')
+        %} {% if weather_state not in [''unknown'', ''unavailable''] %} {{ weather_state
+        | title }}, {{ temp }}°C{% if forecast and forecast | length > 0 %}, High:
+        {{ forecast[0].temperature }}°C{% endif %} {% else %} Weather unavailable
+        {% endif %}
+
+        '
+    continue_on_error: true
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.ai_calendar_context
+    data:
+      value: '{% if is_state(''calendar.shared_calendar'', ''on'') %} {{ state_attr(''calendar.shared_calendar'',
+        ''message'') }} at {{ state_attr(''calendar.shared_calendar'', ''start_time'')
+        | as_timestamp | timestamp_custom(''%I:%M %p'') }} {% else %} No events today
+        {% endif %}
+
+        '
+    continue_on_error: true
+  mode: single
+generate_ai_summary:
+  alias: Generate AI Summary
+  description: Calls OpenAI API with context and parses response
+  sequence:
+  - service: script.gather_ai_context
+    data: {}
+  - delay:
+      seconds: 2
+  - service: rest_command.openai_summary
+    data:
+      prompt: 'Generate a brief daily summary for {{ now().strftime(''%A, %B %d'')
+        }}. Weather: {{ states(''input_text.ai_weather_context'') }}. Calendar: {{
+        states(''input_text.ai_calendar_context'') }}. Keep it under 100 words, warm
+        and conversational.
+
+        '
+    response_variable: openai_response
+    continue_on_error: true
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.ai_summary_response
+    data:
+      value: '{% if openai_response is defined and openai_response.status == 200 %}
+        {% set response_json = openai_response.content | from_json %} {% if response_json.choices
+        is defined and response_json.choices | length > 0 %} {{ response_json.choices[0].message.content[:250]
+        }} {% else %} API error. Check config. {% endif %} {% else %} Have a wonderful
+        {{ now().strftime(''%A'') }}! {% endif %}
+
+        '
+    continue_on_error: true
+  mode: single
+deliver_ai_summary_bookish:
+  alias: Deliver AI Summary - Bookish
+  description: Formats and sends AI summary notification to Bookish's mobile device
+  sequence:
+  - action: notify.mobile_app_bookish_iphone_17
+    data:
+      title: "\U0001F916 Your Daily Summary"
+      message: '{% set summary = states(''input_text.ai_summary_response'') %} {%
+        if summary not in [''unknown'', ''unavailable'', ''''] %} {{ summary }} {%
+        else %} Good {{ now().strftime(''%A'') }}! ☀️ Weather: {{ states(''input_text.ai_weather_context'')
+        }} Calendar: {{ states(''input_text.ai_calendar_context'') }} Have a wonderful
+        day! {% endif %}'
+    continue_on_error: true
+  mode: single
+deliver_ai_summary_jester:
+  alias: Deliver AI Summary - Jester
+  description: Formats and sends AI summary notification to Jester's mobile device
+  sequence:
+  - action: notify.mobile_app_bens_iphone
+    data:
+      title: "\U0001F916 Your Daily Summary"
+      message: '{% set summary = states(''input_text.ai_summary_response'') %} {%
+        if summary not in [''unknown'', ''unavailable'', ''''] %} {{ summary }} {%
+        else %} Good {{ now().strftime(''%A'') }}! ☀️ Weather: {{ states(''input_text.ai_weather_context'')
+        }} Calendar: {{ states(''input_text.ai_calendar_context'') }} Have a wonderful
+        day! {% endif %}'
+    continue_on_error: true
+  mode: single
+fetch_book_recommendation:
+  alias: Fetch Book Recommendation
+  description: Calls Open Library API and parses book data
+  sequence:
+  - service: rest_command.get_book_recommendation
+    data:
+      genre: '{{ states(''input_text.book_genre_preference'') }}'
+    response_variable: book_api_response
+    continue_on_error: true
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.book_recommendation_title
+    data:
+      value: '{% if book_api_response is defined and book_api_response.status == 200
+        %} {% set response_json = book_api_response.content | from_json %} {% if response_json.docs
+        is defined and response_json.docs | length > 0 %} {% set books = response_json.docs
+        | selectattr(''title'', ''defined'') | selectattr(''author_name'', ''defined'')
+        | list %} {% if books | length > 0 %} {% set random_index = range(0, books
+        | length) | random %} {% set book = books[random_index] %} {{ book.title[:250]
+        }} {% else %} No books found {% endif %} {% else %} No books found {% endif
+        %} {% else %} API error {% endif %}
+
+        '
+    continue_on_error: true
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.book_recommendation_author
+    data:
+      value: '{% if book_api_response is defined and book_api_response.status == 200
+        %} {% set response_json = book_api_response.content | from_json %} {% if response_json.docs
+        is defined and response_json.docs | length > 0 %} {% set books = response_json.docs
+        | selectattr(''title'', ''defined'') | selectattr(''author_name'', ''defined'')
+        | list %} {% if books | length > 0 %} {% set random_index = range(0, books
+        | length) | random %} {% set book = books[random_index] %} {{ book.author_name[0]
+        if book.author_name is defined and book.author_name | length > 0 else ''Unknown
+        Author'' }} {% else %} Unknown {% endif %} {% else %} Unknown {% endif %}
+        {% else %} Unknown {% endif %}
+
+        '
+    continue_on_error: true
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.book_recommendation_description
+    data:
+      value: '{% if book_api_response is defined and book_api_response.status == 200
+        %} {% set response_json = book_api_response.content | from_json %} {% if response_json.docs
+        is defined and response_json.docs | length > 0 %} {% set books = response_json.docs
+        | selectattr(''title'', ''defined'') | selectattr(''author_name'', ''defined'')
+        | list %} {% if books | length > 0 %} {% set random_index = range(0, books
+        | length) | random %} {% set book = books[random_index] %} {% if book.first_sentence
+        is defined and book.first_sentence | length > 0 %} {{ book.first_sentence[0][:250]
+        }} {% elif book.subject is defined and book.subject | length > 0 %} Topics:
+        {{ book.subject[:3] | join('', '') }} {% else %} Published: {{ book.first_publish_year
+        if book.first_publish_year is defined else ''Unknown'' }} {% endif %} {% else
+        %} No description available {% endif %} {% else %} No description available
+        {% endif %} {% else %} No description available {% endif %}
+
+        '
+    continue_on_error: true
+  mode: single
+deliver_book_recommendation_bookish:
+  alias: Deliver Book Recommendation - Bookish
+  description: Formats and sends book recommendation notification to Bookish's mobile
+    device
+  sequence:
+  - action: notify.mobile_app_bookish_iphone_17
+    data:
+      title: "\U0001F4DA Your Daily Book Recommendation"
+      message: "{% set title = states('input_text.book_recommendation_title') %} {%
+        set author = states('input_text.book_recommendation_author') %} {% set description
+        = states('input_text.book_recommendation_description') %} {% if title not
+        in ['unknown', 'unavailable', '', 'No books found', 'API error'] %} *{{ title
+        }}* by {{ author }} {{ description }} {% else %} Couldn't fetch a recommendation
+        right now. Try again later! \U0001F4D6 {% endif %}"
+    continue_on_error: true
+  mode: single
+deliver_book_recommendation_jester:
+  alias: Deliver Book Recommendation - Jester
+  description: Formats and sends book recommendation notification to Jester's mobile
+    device
+  sequence:
+  - action: notify.mobile_app_bens_iphone
+    data:
+      title: "\U0001F4DA Your Daily Book Recommendation"
+      message: "{% set title = states('input_text.book_recommendation_title') %} {%
+        set author = states('input_text.book_recommendation_author') %} {% set description
+        = states('input_text.book_recommendation_description') %} {% if title not
+        in ['unknown', 'unavailable', '', 'No books found', 'API error'] %} *{{ title
+        }}* by {{ author }} {{ description }} {% else %} Couldn't fetch a recommendation
+        right now. Try again later! \U0001F4D6 {% endif %}"
+    continue_on_error: true
+  mode: single

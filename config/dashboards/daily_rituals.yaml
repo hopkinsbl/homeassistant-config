@@ -1,0 +1,309 @@
+# ============================================================================
+# DAILY RITUALS & MOMENTS DASHBOARD
+# ============================================================================
+# Purpose: Display status and information for all daily ritual automations
+# 
+# This dashboard provides:
+# - Status indicators for each automation (enabled/disabled, last triggered)
+# - Current AI summary and book recommendation
+# - Quick access to trigger automations manually
+# - Visual feedback on ritual execution
+#
+# INSTALLATION:
+# 1. Add this dashboard in Home Assistant UI:
+#    Settings > Dashboards > Add Dashboard > Select "Use YAML mode"
+# 2. Or add to configuration.yaml:
+#    lovelace:
+#      mode: yaml
+#      dashboards:
+#        daily-rituals:
+#          mode: yaml
+#          title: Daily Rituals
+#          icon: mdi:calendar-star
+#          show_in_sidebar: true
+#          filename: dashboards/daily_rituals.yaml
+# 3. Restart Home Assistant
+#
+# CUSTOMIZATION:
+# - Replace entity IDs with your actual entities
+# - Adjust card layouts and styling as needed
+# - Add or remove sections based on your setup
+# ============================================================================
+
+title: Daily Rituals & Moments
+icon: mdi:calendar-star
+
+views:
+  - title: Overview
+    icon: mdi:view-dashboard
+    path: overview
+    badges: []
+    cards:
+      # ======================================================================
+      # SECTION: Morning Routines
+      # ======================================================================
+      - type: vertical-stack
+        cards:
+          - type: markdown
+            content: |
+              ## 🌅 Morning Routines
+              Personalized greetings when you first unlock your phone
+          
+          # Morning Routine Status Cards
+          - type: entities
+            title: Morning Routine - Bookish
+            show_header_toggle: false
+            entities:
+              - entity: automation.morning_routine_bookish
+                name: Automation Status
+                secondary_info: last-triggered
+              - entity: sensor.bookish_iphone_17_steps
+                name: Today's Steps
+              - entity: sensor.bookish_daily_steps
+                name: Daily Step Tracker
+              - type: button
+                name: Trigger Manually
+                action_name: Run
+                tap_action:
+                  action: call-service
+                  service: automation.trigger
+                  service_data:
+                    entity_id: automation.morning_routine_bookish
+          
+          - type: entities
+            title: Morning Routine - Jester
+            show_header_toggle: false
+            entities:
+              - entity: automation.morning_routine_jester
+                name: Automation Status
+                secondary_info: last-triggered
+              - entity: sensor.bens_iphone_steps
+                name: Today's Steps
+              - entity: sensor.jester_daily_steps
+                name: Daily Step Tracker
+              - type: button
+                name: Trigger Manually
+                action_name: Run
+                tap_action:
+                  action: call-service
+                  service: automation.trigger
+                  service_data:
+                    entity_id: automation.morning_routine_jester
+
+      # ======================================================================
+      # SECTION: Welcome Home
+      # ======================================================================
+      - type: vertical-stack
+        cards:
+          - type: markdown
+            content: |
+              ## 🏠 Welcome Home
+              Greeting when you arrive home
+          
+          - type: entities
+            title: Welcome Home - Bookish
+            show_header_toggle: false
+            entities:
+              - entity: automation.welcome_home_bookish
+                name: Automation Status
+                secondary_info: last-triggered
+              - entity: person.bookish
+                name: Current Location
+              - type: button
+                name: Trigger Manually
+                action_name: Run
+                tap_action:
+                  action: call-service
+                  service: automation.trigger
+                  service_data:
+                    entity_id: automation.welcome_home_bookish
+          
+          - type: entities
+            title: Welcome Home - Jester
+            show_header_toggle: false
+            entities:
+              - entity: automation.welcome_home_jester
+                name: Automation Status
+                secondary_info: last-triggered
+              - entity: person.jester
+                name: Current Location
+              - type: button
+                name: Trigger Manually
+                action_name: Run
+                tap_action:
+                  action: call-service
+                  service: automation.trigger
+                  service_data:
+                    entity_id: automation.welcome_home_jester
+
+      # ======================================================================
+      # SECTION: AI Summaries
+      # ======================================================================
+      - type: vertical-stack
+        cards:
+          - type: markdown
+            content: |
+              ## 🤖 AI Daily Summaries
+              Contextual summaries at 7 AM and when you arrive home
+          
+          - type: entities
+            title: AI Summary Automations
+            show_header_toggle: false
+            entities:
+              - entity: automation.ai_summary_morning
+                name: Morning Summary (7 AM)
+                secondary_info: last-triggered
+              - entity: automation.ai_summary_home_arrival
+                name: Home Arrival Summary
+                secondary_info: last-triggered
+              - type: button
+                name: Generate Summary Now
+                action_name: Run
+                tap_action:
+                  action: call-service
+                  service: script.generate_ai_summary
+          
+          # Display current AI summary
+          - type: markdown
+            title: Latest AI Summary
+            content: |
+              {% set summary = states('input_text.ai_summary_response') %}
+              {% if summary not in ['unknown', 'unavailable', ''] %}
+              **{{ summary }}**
+              {% else %}
+              _No summary generated yet today_
+              {% endif %}
+          
+          # Context information
+          - type: entities
+            title: Summary Context
+            show_header_toggle: false
+            entities:
+              - entity: input_text.ai_weather_context
+                name: Weather Context
+              - entity: input_text.ai_calendar_context
+                name: Calendar Context
+
+      # ======================================================================
+      # SECTION: Book Recommendations
+      # ======================================================================
+      - type: vertical-stack
+        cards:
+          - type: markdown
+            content: |
+              ## 📚 Daily Book Recommendations
+              Discover new books every evening at 6 PM
+          
+          - type: entities
+            title: Book Recommendation Automation
+            show_header_toggle: false
+            entities:
+              - entity: automation.book_recommendation_daily
+                name: Daily Recommendation (6 PM)
+                secondary_info: last-triggered
+              - entity: input_text.book_genre_preference
+                name: Genre Preference
+              - type: button
+                name: Get Recommendation Now
+                action_name: Fetch
+                tap_action:
+                  action: call-service
+                  service: script.fetch_book_recommendation
+          
+          # Display current book recommendation
+          - type: markdown
+            title: Current Recommendation
+            content: |
+              {% set title = states('input_text.book_recommendation_title') %}
+              {% set author = states('input_text.book_recommendation_author') %}
+              {% set description = states('input_text.book_recommendation_description') %}
+              {% if title not in ['unknown', 'unavailable', ''] %}
+              ### 📖 {{ title }}
+              **by {{ author }}**
+              
+              {{ description }}
+              {% else %}
+              _No recommendation available yet. Trigger the automation to get one!_
+              {% endif %}
+
+      # ======================================================================
+      # SECTION: Quick Actions
+      # ======================================================================
+      - type: entities
+        title: Quick Actions
+        show_header_toggle: false
+        entities:
+          - type: button
+            name: Run Morning Routine (Bookish)
+            icon: mdi:weather-sunset-up
+            action_name: Run
+            tap_action:
+              action: call-service
+              service: script.morning_greeting_bookish
+          
+          - type: button
+            name: Run Morning Routine (Jester)
+            icon: mdi:weather-sunset-up
+            action_name: Run
+            tap_action:
+              action: call-service
+              service: script.morning_greeting_jester
+          
+          - type: button
+            name: Run Welcome Home (Bookish)
+            icon: mdi:home-heart
+            action_name: Run
+            tap_action:
+              action: call-service
+              service: script.welcome_home_bookish
+          
+          - type: button
+            name: Run Welcome Home (Jester)
+            icon: mdi:home-heart
+            action_name: Run
+            tap_action:
+              action: call-service
+              service: script.welcome_home_jester
+          
+          - type: button
+            name: Generate AI Summary
+            icon: mdi:robot
+            action_name: Generate
+            tap_action:
+              action: call-service
+              service: script.generate_ai_summary
+          
+          - type: button
+            name: Get Book Recommendation
+            icon: mdi:book-open-page-variant
+            action_name: Fetch
+            tap_action:
+              action: call-service
+              service: script.fetch_book_recommendation
+
+      # ======================================================================
+      # SECTION: Automation Health
+      # ======================================================================
+      - type: entities
+        title: Automation Health
+        show_header_toggle: false
+        state_color: true
+        entities:
+          - entity: automation.morning_routine_bookish
+            name: Morning - Bookish
+          - entity: automation.morning_routine_jester
+            name: Morning - Jester
+          - entity: automation.welcome_home_bookish
+            name: Welcome - Bookish
+          - entity: automation.welcome_home_jester
+            name: Welcome - Jester
+          - entity: automation.ai_summary_morning
+            name: AI Morning
+          - entity: automation.ai_summary_home_arrival
+            name: AI Home Arrival
+          - entity: automation.book_recommendation_daily
+            name: Book Daily
+          - entity: automation.book_recommendation_try_again_bookish
+            name: Book Try Again - Bookish
+          - entity: automation.book_recommendation_try_again_jester
+            name: Book Try Again - Jester

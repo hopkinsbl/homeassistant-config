@@ -1,0 +1,176 @@
+title: Our Life Together (Basic)
+theme: default
+views:
+  - title: Home
+    path: home
+    icon: mdi:heart
+    cards:
+      # Left Column - Immigration, Countdowns, Love Notes
+      - type: vertical-stack
+        cards:
+          # Immigration Timeline Tracker
+          - type: vertical-stack
+            cards:
+              # Timeline Header
+              - type: markdown
+                content: |
+                  ## 🛂 Immigration Journey
+                  Tracking our visa and immigration milestones
+              
+              # Progress Bar
+              - type: entities
+                entities:
+                  - entity: sensor.immigration_progress
+                    name: "Overall Progress"
+                    icon: mdi:progress-check
+              
+              # Progress Visualization (using gauge card)
+              - type: gauge
+                entity: sensor.immigration_progress
+                min: 0
+                max: 100
+                name: "Completion"
+                needle: true
+                severity:
+                  green: 75
+                  yellow: 40
+                  red: 0
+              
+              # Next Milestone Highlight
+              - type: markdown
+                content: |
+                  ### 🎯 Next Milestone
+                  **{{ states('sensor.next_immigration_milestone') }}**
+                  
+                  {% if states('sensor.days_until_next_immigration_milestone') not in ['unknown', 'unavailable', 'Not set'] %}
+                  ⏰ {{ states('sensor.days_until_next_immigration_milestone') }} days remaining
+                  {% else %}
+                  📅 Date not set yet
+                  {% endif %}
+          
+          # Countdown System
+          - type: vertical-stack
+            cards:
+              # Countdown Header
+              - type: markdown
+                content: |
+                  ## ⏰ Important Countdowns
+                  Days remaining until important dates
+              
+              # All Countdowns Display
+              - type: glance
+                title: "Upcoming Events"
+                show_state: true
+                columns: 2
+                entities:
+                  - entity: sensor.days_until_payday
+                    name: "💰 Payday"
+                    icon: mdi:cash-multiple
+                  
+                  - entity: sensor.countdown_important_date_1
+                    name: "Event 1"
+                    icon: mdi:calendar-star
+                  
+                  - entity: sensor.countdown_important_date_2
+                    name: "Event 2"
+                    icon: mdi:calendar-star
+                  
+                  - entity: sensor.countdown_important_date_3
+                    name: "Event 3"
+                    icon: mdi:calendar-star
+          
+          # Love Notes Card
+          - type: vertical-stack
+            cards:
+              # Love Notes Header and Display
+              - type: markdown
+                content: |
+                  ## 💕 Love Note
+                  
+                  {{ states('sensor.current_love_note') }}
+                  
+                  ---
+                  
+                  _Rotating every 4 hours • Note {{ states('input_number.love_note_current_index') | int }} of 10_
+      
+      # Right Column - Shared Lists and Relationship Journey
+      - type: vertical-stack
+        cards:
+          # Shared Lists Section
+          - type: vertical-stack
+            cards:
+              # Shared Lists Header
+              - type: markdown
+                content: |
+                  ## 📝 Our Shared Lists
+                  Managing our life together
+              
+              # Grocery List (first 5 items only for basic version)
+              - type: entities
+                title: "🛒 Grocery List"
+                entities:
+                  - entity: input_text.grocery_item_1
+                    name: "Item 1"
+                    icon: mdi:cart
+                  - entity: input_boolean.grocery_item_1_checked
+                    name: "✓"
+                  
+                  - entity: input_text.grocery_item_2
+                    name: "Item 2"
+                    icon: mdi:cart
+                  - entity: input_boolean.grocery_item_2_checked
+                    name: "✓"
+                  
+                  - entity: input_text.grocery_item_3
+                    name: "Item 3"
+                    icon: mdi:cart
+                  - entity: input_boolean.grocery_item_3_checked
+                    name: "✓"
+              
+              # Reading List (first 3 books only)
+              - type: entities
+                title: "📚 Reading List"
+                entities:
+                  - entity: input_text.reading_list_book_1
+                    name: "Book 1"
+                    icon: mdi:book-open-page-variant
+                  - entity: input_text.reading_list_book_1_author
+                    name: "Author"
+                    icon: mdi:account-edit
+                  - entity: input_select.reading_list_book_1_status
+                    name: "Status"
+          
+          # Relationship Journey Timeline
+          - type: vertical-stack
+            cards:
+              # Journey Header
+              - type: markdown
+                content: |
+                  ## 💑 Our Journey Together
+                  Celebrating our shared story and future
+              
+              # Days Since Arrival Highlight
+              - type: markdown
+                content: |
+                  ### 🌟 Days Together
+                  
+                  {% if states('sensor.days_since_sharlene_arrived') not in ['unknown', 'unavailable', 'Not set'] %}
+                  **{{ states('sensor.days_since_sharlene_arrived') }} days** since Sharlene arrived
+                  {% else %}
+                  Set Sharlene's arrival date to start tracking!
+                  {% endif %}
+              
+              # Next Milestone Highlight
+              - type: markdown
+                content: |
+                  ### 🎯 Next Milestone
+                  
+                  {% if states('sensor.next_relationship_milestone') not in ['unknown', 'unavailable', 'No upcoming milestones'] %}
+                  **{{ states('sensor.next_relationship_milestone') }}**
+                  
+                  {% if states('sensor.days_until_next_relationship_milestone') not in ['unknown', 'unavailable', '0'] %}
+                  ⏰ {{ states('sensor.days_until_next_relationship_milestone') }} days to go
+                  {% endif %}
+                  {% else %}
+                  No upcoming milestones set yet
+                  {% endif %}

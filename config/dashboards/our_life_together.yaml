@@ -1,0 +1,992 @@
+title: Our Life Together
+theme: default
+views:
+  - title: Home
+    path: home
+    icon: mdi:heart
+    cards:
+      # Two-column layout using horizontal-stack
+      - type: horizontal-stack
+        cards:
+          # Left Column - Immigration, Countdowns, Love Notes
+          - type: vertical-stack
+            cards:
+          # Calendar View Card - Shows next 7 days of events
+          # TODO: Uncomment after setting up Google Calendar integration
+          # - type: vertical-stack
+          #   cards:
+          #     - type: markdown
+          #       content: |
+          #         ## 📅 Our Shared Calendar
+          #         Upcoming events for the next 7 days
+          #     
+          #     # Main calendar card with 7-day view
+          #     - type: calendar
+          #       entities:
+          #         - calendar.your_google_calendar_name
+          #       initial_view: listWeek
+          #     
+          #     # Upcoming events in next 24 hours (highlighted)
+          #     - type: conditional
+          #       conditions:
+          #         - condition: state
+          #           entity: calendar.your_google_calendar_name
+          #           state: "on"
+          #       card:
+          #         type: markdown
+          #       content: |
+          #           ### ⚡ Next 24 Hours
+          #           **{{ state_attr('calendar.your_google_calendar_name', 'message') }}**
+          #           
+          #           📍 {{ state_attr('calendar.your_google_calendar_name', 'location') if state_attr('calendar.your_google_calendar_name', 'location') else 'No location' }}
+          #           
+          #           🕐 Starts: {{ state_attr('calendar.your_google_calendar_name', 'start_time') }}
+          #           🕐 Ends: {{ state_attr('calendar.your_google_calendar_name', 'end_time') }}
+          #         card_mod:
+          #           style: |
+          #             ha-card {
+          #               background-color: var(--accent-color);
+          #               border-left: 4px solid var(--primary-color);
+          #             }
+          
+          # Immigration Timeline Tracker
+          - type: vertical-stack
+            cards:
+              # Timeline Header
+              - type: markdown
+                content: |
+                  ## 🛂 Immigration Journey
+                  Tracking our visa and immigration milestones
+                card_mod:
+                  style: |
+                    ha-card {
+                      background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%);
+                      border-radius: 12px;
+                      padding: 8px;
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                    }
+              
+              # Progress Bar
+              - type: entities
+                entities:
+                  - entity: sensor.immigration_progress
+                    name: "Overall Progress"
+                    icon: mdi:progress-check
+                card_mod:
+                  style: |
+                    ha-card {
+                      border-left: 4px solid #4CAF50;
+                      border-radius: 12px;
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                    }
+              
+              # Progress Visualization (using gauge card)
+              - type: gauge
+                entity: sensor.immigration_progress
+                min: 0
+                max: 100
+                name: "Completion"
+                needle: true
+                severity:
+                  green: 75
+                  yellow: 40
+                  red: 0
+                card_mod:
+                  style: |
+                    ha-card {
+                      border-radius: 12px;
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                    }
+              
+              # Next Milestone Highlight
+              - type: markdown
+                content: |
+                  ### 🎯 Next Milestone
+                  **{{ states('sensor.next_immigration_milestone') }}**
+                  
+                  {% if states('sensor.days_until_next_immigration_milestone') not in ['unknown', 'unavailable', 'Not set'] %}
+                  ⏰ {{ states('sensor.days_until_next_immigration_milestone') }} days remaining
+                  {% else %}
+                  📅 Date not set yet
+                  {% endif %}
+                card_mod:
+                  style: |
+                    ha-card {
+                      background: linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(76, 175, 80, 0.05) 100%);
+                      border-left: 4px solid #4CAF50;
+                      border-radius: 12px;
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                      padding: 16px;
+                    }
+              
+              # Milestone List with Completion Status
+              - type: entities
+                title: "Immigration Milestones"
+                card_mod:
+                  style: |
+                    ha-card {
+                      border-radius: 12px;
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                    }
+                entities:
+                  - type: custom:fold-entity-row
+                    head:
+                      type: section
+                      label: "✅ Sharlene Arrival"
+                    entities:
+                      - entity: input_datetime.sharlene_arrival
+                        name: "Date"
+                        icon: mdi:airplane-landing
+                      - entity: input_boolean.milestone_sharlene_arrival
+                        name: "Completed"
+                  
+                  - type: custom:fold-entity-row
+                    head:
+                      type: section
+                      label: "📋 Visa Lodgement"
+                    entities:
+                      - entity: input_datetime.visa_lodgement
+                        name: "Date"
+                        icon: mdi:file-document
+                      - entity: input_boolean.milestone_visa_lodgement
+                        name: "Completed"
+                  
+                  - type: custom:fold-entity-row
+                    head:
+                      type: section
+                      label: "💍 Relationship Registration"
+                    entities:
+                      - entity: input_datetime.relationship_registration
+                        name: "Date"
+                        icon: mdi:heart-circle
+                      - entity: input_boolean.milestone_relationship_registration
+                        name: "Completed"
+                  
+                  - type: custom:fold-entity-row
+                    head:
+                      type: section
+                      label: "🏠 Temporary House Move"
+                    entities:
+                      - entity: input_datetime.temp_house_move
+                        name: "Date"
+                        icon: mdi:home-import-outline
+                      - entity: input_boolean.milestone_temp_house_move
+                        name: "Completed"
+                  
+                  - type: custom:fold-entity-row
+                    head:
+                      type: section
+                      label: "🏡 Forever Home Build"
+                    entities:
+                      - entity: input_datetime.forever_home_build
+                        name: "Date"
+                        icon: mdi:home-heart
+                      - entity: input_boolean.milestone_forever_home_build
+                        name: "Completed"
+          
+          # Countdown System
+          - type: vertical-stack
+            cards:
+              # Countdown Header
+              - type: markdown
+                content: |
+                  ## ⏰ Important Countdowns
+                  Days remaining until important dates
+                card_mod:
+                  style: |
+                    ha-card {
+                      background: linear-gradient(135deg, rgba(255, 152, 0, 0.1) 0%, rgba(255, 152, 0, 0.05) 100%);
+                      border-radius: 12px;
+                      padding: 8px;
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                    }
+              
+              # Celebration Message (shown when countdown reaches zero)
+              - type: conditional
+                conditions:
+                  - condition: template
+                    value_template: "{{ states('input_text.countdown_celebration_message') != '' }}"
+                card:
+                  type: markdown
+                  content: |
+                    ### 🎉 {{ states('input_text.countdown_celebration_message') }}
+                    
+                    This celebration will be displayed for 24 hours! 🎈
+                  card_mod:
+                    style: |
+                      ha-card {
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        color: white;
+                        border: 3px solid gold;
+                        border-radius: 16px;
+                        padding: 20px;
+                        text-align: center;
+                        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+                        animation: pulse 2s infinite;
+                      }
+                      @keyframes pulse {
+                        0%, 100% { transform: scale(1); box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4); }
+                        50% { transform: scale(1.02); box-shadow: 0 6px 30px rgba(102, 126, 234, 0.6); }
+                      }
+              
+              # All Countdowns Display
+              - type: glance
+                title: "Upcoming Events"
+                show_state: true
+                columns: 2
+                card_mod:
+                  style: |
+                    ha-card {
+                      border-radius: 12px;
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                    }
+                entities:
+                  - entity: sensor.days_until_payday
+                    name: "💰 Payday"
+                    icon: mdi:cash-multiple
+                  
+                  - entity: sensor.countdown_important_date_1
+                    name: "{{ states('input_text.important_date_1_name') }}"
+                    icon: mdi:calendar-star
+                  
+                  - entity: sensor.countdown_important_date_2
+                    name: "{{ states('input_text.important_date_2_name') }}"
+                    icon: mdi:calendar-star
+                  
+                  - entity: sensor.countdown_important_date_3
+                    name: "{{ states('input_text.important_date_3_name') }}"
+                    icon: mdi:calendar-star
+              
+              # Detailed Countdown Cards
+              - type: entities
+                title: "Countdown Details"
+                card_mod:
+                  style: |
+                    ha-card {
+                      border-radius: 12px;
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                    }
+                entities:
+                  - type: custom:fold-entity-row
+                    head:
+                      type: section
+                      label: "💰 Payday Countdown"
+                    entities:
+                      - entity: sensor.days_until_payday
+                        name: "Days Remaining"
+                        icon: mdi:calendar-clock
+                  
+                  - type: custom:fold-entity-row
+                    head:
+                      type: section
+                      label: "⭐ Custom Countdowns"
+                    entities:
+                      - entity: input_text.important_date_1_name
+                        name: "Event 1 Name"
+                      - entity: input_datetime.important_date_1
+                        name: "Event 1 Date"
+                      - entity: sensor.countdown_important_date_1
+                        name: "Days Remaining"
+                      
+                      - type: divider
+                      
+                      - entity: input_text.important_date_2_name
+                        name: "Event 2 Name"
+                      - entity: input_datetime.important_date_2
+                        name: "Event 2 Date"
+                      - entity: sensor.countdown_important_date_2
+                        name: "Days Remaining"
+                      
+                      - type: divider
+                      
+                      - entity: input_text.important_date_3_name
+                        name: "Event 3 Name"
+                      - entity: input_datetime.important_date_3
+                        name: "Event 3 Date"
+                      - entity: sensor.countdown_important_date_3
+                        name: "Days Remaining"
+          
+          # Love Notes Card
+          - type: vertical-stack
+            cards:
+              # Love Notes Header and Display
+              - type: markdown
+                content: |
+                  ## 💕 Love Note
+                  
+                  {{ states('sensor.current_love_note') }}
+                  
+                  ---
+                  
+                  _Rotating every 4 hours • Note {{ states('input_number.love_note_current_index') | int }} of 10_
+                card_mod:
+                  style: |
+                    ha-card {
+                      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                      color: white;
+                      text-align: center;
+                      padding: 24px;
+                      border-radius: 16px;
+                      box-shadow: 0 6px 20px rgba(240, 147, 251, 0.4);
+                      font-size: 1.1em;
+                      line-height: 1.6;
+                    }
+                    ha-card h2 {
+                      margin-top: 0;
+                      font-size: 1.8em;
+                    }
+              
+              # Love Notes Management (Collapsible)
+              - type: entities
+                title: "✏️ Manage Love Notes"
+                card_mod:
+                  style: |
+                    ha-card {
+                      border-radius: 12px;
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                    }
+                entities:
+                  - entity: input_number.love_note_current_index
+                    name: "Current Note Index"
+                    icon: mdi:counter
+                  
+                  - type: custom:fold-entity-row
+                    head:
+                      type: section
+                      label: "Edit Love Notes"
+                    entities:
+                      - entity: input_text.love_note_1
+                        name: "Love Note 1"
+                        icon: mdi:heart
+                      - entity: input_text.love_note_2
+                        name: "Love Note 2"
+                        icon: mdi:heart
+                      - entity: input_text.love_note_3
+                        name: "Love Note 3"
+                        icon: mdi:heart
+                      - entity: input_text.love_note_4
+                        name: "Love Note 4"
+                        icon: mdi:heart
+                      - entity: input_text.love_note_5
+                        name: "Love Note 5"
+                        icon: mdi:heart
+                      - entity: input_text.love_note_6
+                        name: "Love Note 6"
+                        icon: mdi:heart
+                      - entity: input_text.love_note_7
+                        name: "Love Note 7"
+                        icon: mdi:heart
+                      - entity: input_text.love_note_8
+                        name: "Love Note 8"
+                        icon: mdi:heart
+                      - entity: input_text.love_note_9
+                        name: "Love Note 9"
+                        icon: mdi:heart
+                      - entity: input_text.love_note_10
+                        name: "Love Note 10"
+                        icon: mdi:heart
+          
+          # Right Column - Shared Lists and Relationship Journey
+          - type: vertical-stack
+        cards:
+          # Shared Lists Section
+          - type: vertical-stack
+            cards:
+              # Shared Lists Header
+              - type: markdown
+                content: |
+                  ## 📝 Our Shared Lists
+                  Managing our life together
+                card_mod:
+                  style: |
+                    ha-card {
+                      background: linear-gradient(135deg, rgba(33, 150, 243, 0.1) 0%, rgba(33, 150, 243, 0.05) 100%);
+                      border-radius: 12px;
+                      padding: 8px;
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                    }
+              
+              # Grocery List
+              - type: entities
+                title: "🛒 Grocery List"
+                card_mod:
+                  style: |
+                    ha-card {
+                      border-radius: 12px;
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                      border-left: 4px solid #4CAF50;
+                    }
+                entities:
+                  - entity: input_text.grocery_item_1
+                    name: "Item 1"
+                    icon: mdi:cart
+                  - entity: input_boolean.grocery_item_1_checked
+                    name: "✓"
+                  
+                  - entity: input_text.grocery_item_2
+                    name: "Item 2"
+                    icon: mdi:cart
+                  - entity: input_boolean.grocery_item_2_checked
+                    name: "✓"
+                  
+                  - entity: input_text.grocery_item_3
+                    name: "Item 3"
+                    icon: mdi:cart
+                  - entity: input_boolean.grocery_item_3_checked
+                    name: "✓"
+                  
+                  - entity: input_text.grocery_item_4
+                    name: "Item 4"
+                    icon: mdi:cart
+                  - entity: input_boolean.grocery_item_4_checked
+                    name: "✓"
+                  
+                  - entity: input_text.grocery_item_5
+                    name: "Item 5"
+                    icon: mdi:cart
+                  - entity: input_boolean.grocery_item_5_checked
+                    name: "✓"
+                  
+                  - entity: input_text.grocery_item_6
+                    name: "Item 6"
+                    icon: mdi:cart
+                  - entity: input_boolean.grocery_item_6_checked
+                    name: "✓"
+                  
+                  - entity: input_text.grocery_item_7
+                    name: "Item 7"
+                    icon: mdi:cart
+                  - entity: input_boolean.grocery_item_7_checked
+                    name: "✓"
+                  
+                  - entity: input_text.grocery_item_8
+                    name: "Item 8"
+                    icon: mdi:cart
+                  - entity: input_boolean.grocery_item_8_checked
+                    name: "✓"
+                  
+                  - entity: input_text.grocery_item_9
+                    name: "Item 9"
+                    icon: mdi:cart
+                  - entity: input_boolean.grocery_item_9_checked
+                    name: "✓"
+                  
+                  - entity: input_text.grocery_item_10
+                    name: "Item 10"
+                    icon: mdi:cart
+                  - entity: input_boolean.grocery_item_10_checked
+                    name: "✓"
+                  
+                  - type: custom:fold-entity-row
+                    head:
+                      type: section
+                      label: "More Items (11-20)"
+                    entities:
+                      - entity: input_text.grocery_item_11
+                        name: "Item 11"
+                        icon: mdi:cart
+                      - entity: input_boolean.grocery_item_11_checked
+                        name: "✓"
+                      
+                      - entity: input_text.grocery_item_12
+                        name: "Item 12"
+                        icon: mdi:cart
+                      - entity: input_boolean.grocery_item_12_checked
+                        name: "✓"
+                      
+                      - entity: input_text.grocery_item_13
+                        name: "Item 13"
+                        icon: mdi:cart
+                      - entity: input_boolean.grocery_item_13_checked
+                        name: "✓"
+                      
+                      - entity: input_text.grocery_item_14
+                        name: "Item 14"
+                        icon: mdi:cart
+                      - entity: input_boolean.grocery_item_14_checked
+                        name: "✓"
+                      
+                      - entity: input_text.grocery_item_15
+                        name: "Item 15"
+                        icon: mdi:cart
+                      - entity: input_boolean.grocery_item_15_checked
+                        name: "✓"
+                      
+                      - entity: input_text.grocery_item_16
+                        name: "Item 16"
+                        icon: mdi:cart
+                      - entity: input_boolean.grocery_item_16_checked
+                        name: "✓"
+                      
+                      - entity: input_text.grocery_item_17
+                        name: "Item 17"
+                        icon: mdi:cart
+                      - entity: input_boolean.grocery_item_17_checked
+                        name: "✓"
+                      
+                      - entity: input_text.grocery_item_18
+                        name: "Item 18"
+                        icon: mdi:cart
+                      - entity: input_boolean.grocery_item_18_checked
+                        name: "✓"
+                      
+                      - entity: input_text.grocery_item_19
+                        name: "Item 19"
+                        icon: mdi:cart
+                      - entity: input_boolean.grocery_item_19_checked
+                        name: "✓"
+                      
+                      - entity: input_text.grocery_item_20
+                        name: "Item 20"
+                        icon: mdi:cart
+                      - entity: input_boolean.grocery_item_20_checked
+                        name: "✓"
+              
+              # Meal Planner
+              # TODO: Uncomment after setting up Google Calendar integration
+              # Create a separate Google Calendar for meal planning, then update the entity name below
+              # - type: vertical-stack
+              #   cards:
+              #     - type: markdown
+              #       content: |
+              #         ### 🍽️ Meal Planner
+              #         Plan your meals for the next 7 days
+              #     
+              #     - type: calendar
+              #       entities:
+              #         - calendar.meal_plan
+              #       initial_view: listWeek
+              #     
+              #     - type: markdown
+              #       content: |
+              #         💡 **Tip:** Add events to the Meal Plan calendar to schedule meals.
+              #         Each event represents a meal (e.g., "Dinner: Pasta" or "Lunch: Sandwiches")
+              
+              # Reading List
+              - type: entities
+                title: "📚 Reading List"
+                card_mod:
+                  style: |
+                    ha-card {
+                      border-radius: 12px;
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                      border-left: 4px solid #9C27B0;
+                    }
+                entities:
+                  - entity: input_text.reading_list_book_1
+                    name: "Book 1"
+                    icon: mdi:book-open-page-variant
+                  - entity: input_text.reading_list_book_1_author
+                    name: "Author"
+                    icon: mdi:account-edit
+                  - entity: input_select.reading_list_book_1_status
+                    name: "Status"
+                  
+                  - type: divider
+                  
+                  - entity: input_text.reading_list_book_2
+                    name: "Book 2"
+                    icon: mdi:book-open-page-variant
+                  - entity: input_text.reading_list_book_2_author
+                    name: "Author"
+                    icon: mdi:account-edit
+                  - entity: input_select.reading_list_book_2_status
+                    name: "Status"
+                  
+                  - type: divider
+                  
+                  - entity: input_text.reading_list_book_3
+                    name: "Book 3"
+                    icon: mdi:book-open-page-variant
+                  - entity: input_text.reading_list_book_3_author
+                    name: "Author"
+                    icon: mdi:account-edit
+                  - entity: input_select.reading_list_book_3_status
+                    name: "Status"
+                  
+                  - type: divider
+                  
+                  - entity: input_text.reading_list_book_4
+                    name: "Book 4"
+                    icon: mdi:book-open-page-variant
+                  - entity: input_text.reading_list_book_4_author
+                    name: "Author"
+                    icon: mdi:account-edit
+                  - entity: input_select.reading_list_book_4_status
+                    name: "Status"
+                  
+                  - type: divider
+                  
+                  - entity: input_text.reading_list_book_5
+                    name: "Book 5"
+                    icon: mdi:book-open-page-variant
+                  - entity: input_text.reading_list_book_5_author
+                    name: "Author"
+                    icon: mdi:account-edit
+                  - entity: input_select.reading_list_book_5_status
+                    name: "Status"
+                  
+                  - type: custom:fold-entity-row
+                    head:
+                      type: section
+                      label: "More Books (6-10)"
+                    entities:
+                      - entity: input_text.reading_list_book_6
+                        name: "Book 6"
+                        icon: mdi:book-open-page-variant
+                      - entity: input_text.reading_list_book_6_author
+                        name: "Author"
+                        icon: mdi:account-edit
+                      - entity: input_select.reading_list_book_6_status
+                        name: "Status"
+                      
+                      - type: divider
+                      
+                      - entity: input_text.reading_list_book_7
+                        name: "Book 7"
+                        icon: mdi:book-open-page-variant
+                      - entity: input_text.reading_list_book_7_author
+                        name: "Author"
+                        icon: mdi:account-edit
+                      - entity: input_select.reading_list_book_7_status
+                        name: "Status"
+                      
+                      - type: divider
+                      
+                      - entity: input_text.reading_list_book_8
+                        name: "Book 8"
+                        icon: mdi:book-open-page-variant
+                      - entity: input_text.reading_list_book_8_author
+                        name: "Author"
+                        icon: mdi:account-edit
+                      - entity: input_select.reading_list_book_8_status
+                        name: "Status"
+                      
+                      - type: divider
+                      
+                      - entity: input_text.reading_list_book_9
+                        name: "Book 9"
+                        icon: mdi:book-open-page-variant
+                      - entity: input_text.reading_list_book_9_author
+                        name: "Author"
+                        icon: mdi:account-edit
+                      - entity: input_select.reading_list_book_9_status
+                        name: "Status"
+                      
+                      - type: divider
+                      
+                      - entity: input_text.reading_list_book_10
+                        name: "Book 10"
+                        icon: mdi:book-open-page-variant
+                      - entity: input_text.reading_list_book_10_author
+                        name: "Author"
+                        icon: mdi:account-edit
+                      - entity: input_select.reading_list_book_10_status
+                        name: "Status"
+              
+              # Payment Tracker
+              - type: entities
+                title: "💳 Payment Tracker"
+                card_mod:
+                  style: |
+                    ha-card {
+                      border-radius: 12px;
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                      border-left: 4px solid #FF9800;
+                    }
+                entities:
+                  - entity: input_text.payment_1_name
+                    name: "Payment 1"
+                    icon: mdi:cash
+                  - entity: input_number.payment_1_amount
+                    name: "Amount"
+                  - entity: input_datetime.payment_1_due
+                    name: "Due Date"
+                  - entity: sensor.days_until_payment_1
+                    name: "Days Until Due"
+                  
+                  - type: divider
+                  
+                  - entity: input_text.payment_2_name
+                    name: "Payment 2"
+                    icon: mdi:cash
+                  - entity: input_number.payment_2_amount
+                    name: "Amount"
+                  - entity: input_datetime.payment_2_due
+                    name: "Due Date"
+                  - entity: sensor.days_until_payment_2
+                    name: "Days Until Due"
+                  
+                  - type: divider
+                  
+                  - entity: input_text.payment_3_name
+                    name: "Payment 3"
+                    icon: mdi:cash
+                  - entity: input_number.payment_3_amount
+                    name: "Amount"
+                  - entity: input_datetime.payment_3_due
+                    name: "Due Date"
+                  - entity: sensor.days_until_payment_3
+                    name: "Days Until Due"
+                  
+                  - type: divider
+                  
+                  - entity: input_text.payment_4_name
+                    name: "Payment 4"
+                    icon: mdi:cash
+                  - entity: input_number.payment_4_amount
+                    name: "Amount"
+                  - entity: input_datetime.payment_4_due
+                    name: "Due Date"
+                  - entity: sensor.days_until_payment_4
+                    name: "Days Until Due"
+                  
+                  - type: divider
+                  
+                  - entity: input_text.payment_5_name
+                    name: "Payment 5"
+                    icon: mdi:cash
+                  - entity: input_number.payment_5_amount
+                    name: "Amount"
+                  - entity: input_datetime.payment_5_due
+                    name: "Due Date"
+                  - entity: sensor.days_until_payment_5
+                    name: "Days Until Due"
+                  
+                  - type: custom:fold-entity-row
+                    head:
+                      type: section
+                      label: "More Payments (6-10)"
+                    entities:
+                      - entity: input_text.payment_6_name
+                        name: "Payment 6"
+                        icon: mdi:cash
+                      - entity: input_number.payment_6_amount
+                        name: "Amount"
+                      - entity: input_datetime.payment_6_due
+                        name: "Due Date"
+                      - entity: sensor.days_until_payment_6
+                        name: "Days Until Due"
+                      
+                      - type: divider
+                      
+                      - entity: input_text.payment_7_name
+                        name: "Payment 7"
+                        icon: mdi:cash
+                      - entity: input_number.payment_7_amount
+                        name: "Amount"
+                      - entity: input_datetime.payment_7_due
+                        name: "Due Date"
+                      - entity: sensor.days_until_payment_7
+                        name: "Days Until Due"
+                      
+                      - type: divider
+                      
+                      - entity: input_text.payment_8_name
+                        name: "Payment 8"
+                        icon: mdi:cash
+                      - entity: input_number.payment_8_amount
+                        name: "Amount"
+                      - entity: input_datetime.payment_8_due
+                        name: "Due Date"
+                      - entity: sensor.days_until_payment_8
+                        name: "Days Until Due"
+                      
+                      - type: divider
+                      
+                      - entity: input_text.payment_9_name
+                        name: "Payment 9"
+                        icon: mdi:cash
+                      - entity: input_number.payment_9_amount
+                        name: "Amount"
+                      - entity: input_datetime.payment_9_due
+                        name: "Due Date"
+                      - entity: sensor.days_until_payment_9
+                        name: "Days Until Due"
+                      
+                      - type: divider
+                      
+                      - entity: input_text.payment_10_name
+                        name: "Payment 10"
+                        icon: mdi:cash
+                      - entity: input_number.payment_10_amount
+                        name: "Amount"
+                      - entity: input_datetime.payment_10_due
+                        name: "Due Date"
+                      - entity: sensor.days_until_payment_10
+                        name: "Days Until Due"
+          
+          # Relationship Journey Timeline
+          - type: vertical-stack
+            cards:
+              # Journey Header
+              - type: markdown
+                content: |
+                  ## 💑 Our Journey Together
+                  Celebrating our shared story and future
+                card_mod:
+                  style: |
+                    ha-card {
+                      background: linear-gradient(135deg, rgba(233, 30, 99, 0.1) 0%, rgba(233, 30, 99, 0.05) 100%);
+                      border-radius: 12px;
+                      padding: 8px;
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                    }
+              
+              # Days Since Arrival Highlight
+              - type: markdown
+                content: |
+                  ### 🌟 Days Together
+                  
+                  {% if states('sensor.days_since_sharlene_arrived') not in ['unknown', 'unavailable', 'Not set'] %}
+                  **{{ states('sensor.days_since_sharlene_arrived') }} days** since Sharlene arrived
+                  
+                  _Since {{ state_attr('input_datetime.sharlene_arrival', 'timestamp') | timestamp_custom('%B %d, %Y') if states('input_datetime.sharlene_arrival') not in ['unknown', 'unavailable', ''] else 'date not set' }}_
+                  {% else %}
+                  Set Sharlene's arrival date to start tracking!
+                  {% endif %}
+                card_mod:
+                  style: |
+                    ha-card {
+                      background: linear-gradient(135deg, rgba(255, 105, 180, 0.2) 0%, rgba(255, 182, 193, 0.1) 100%);
+                      border-left: 4px solid #FF69B4;
+                      border-radius: 12px;
+                      text-align: center;
+                      padding: 20px;
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                      font-size: 1.1em;
+                    }
+              
+              # Next Milestone Highlight
+              - type: markdown
+                content: |
+                  ### 🎯 Next Milestone
+                  
+                  {% if states('sensor.next_relationship_milestone') not in ['unknown', 'unavailable', 'No upcoming milestones'] %}
+                  **{{ states('sensor.next_relationship_milestone') }}**
+                  
+                  {% if states('sensor.days_until_next_relationship_milestone') not in ['unknown', 'unavailable', '0'] %}
+                  ⏰ {{ states('sensor.days_until_next_relationship_milestone') }} days to go
+                  {% endif %}
+                  {% else %}
+                  No upcoming milestones set yet
+                  {% endif %}
+                card_mod:
+                  style: |
+                    ha-card {
+                      background: linear-gradient(135deg, rgba(147, 112, 219, 0.15) 0%, rgba(147, 112, 219, 0.05) 100%);
+                      border-left: 4px solid #9370DB;
+                      border-radius: 12px;
+                      padding: 16px;
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                    }
+              
+              # Milestone Timeline - Past Milestones
+              - type: entities
+                title: "📖 Past Milestones"
+                card_mod:
+                  style: |
+                    ha-card {
+                      border-radius: 12px;
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                    }
+                entities:
+                  - type: custom:fold-entity-row
+                    head:
+                      type: section
+                      label: "💕 Relationship Milestones"
+                    entities:
+                      - entity: input_datetime.milestone_first_date
+                        name: "First Date"
+                        icon: mdi:calendar-heart
+                      
+                      - entity: input_datetime.milestone_first_kiss
+                        name: "First Kiss"
+                        icon: mdi:heart
+                      
+                      - entity: input_datetime.milestone_said_i_love_you
+                        name: "Said I Love You"
+                        icon: mdi:heart-multiple
+                      
+                      - entity: input_datetime.milestone_first_road_trip
+                        name: "First Road Trip"
+                        icon: mdi:car-side
+                      
+                      - entity: input_datetime.sharlene_arrival
+                        name: "Sharlene Arrived"
+                        icon: mdi:airplane-landing
+                  
+                  - type: custom:fold-entity-row
+                    head:
+                      type: section
+                      label: "🛂 Visa Milestones"
+                    entities:
+                      - entity: input_datetime.milestone_visa_application
+                        name: "Visa Application"
+                        icon: mdi:file-document-edit
+                      
+                      - entity: input_datetime.milestone_visa_approval
+                        name: "Visa Approval"
+                        icon: mdi:check-decagram
+                  
+                  - type: custom:fold-entity-row
+                    head:
+                      type: section
+                      label: "🏡 Housing Milestones"
+                    entities:
+                      - entity: input_datetime.milestone_moved_in_together
+                        name: "Moved In Together"
+                        icon: mdi:home-heart
+                      
+                      - entity: input_datetime.milestone_first_home_together
+                        name: "First Home Together"
+                        icon: mdi:home-import-outline
+                      
+                      - entity: input_datetime.milestone_forever_home_purchase
+                        name: "Forever Home Purchase"
+                        icon: mdi:home-city
+              
+              # Milestone Timeline - Upcoming Milestones
+              - type: entities
+                title: "🔮 Upcoming Milestones"
+                card_mod:
+                  style: |
+                    ha-card {
+                      border-radius: 12px;
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                    }
+                entities:
+                  - entity: sensor.next_relationship_milestone
+                    name: "Next Milestone"
+                    icon: mdi:flag-variant
+                  
+                  - entity: sensor.days_until_next_relationship_milestone
+                    name: "Days Until Next"
+                    icon: mdi:calendar-clock
+                  
+                  - type: divider
+                  
+                  - type: custom:fold-entity-row
+                    head:
+                      type: section
+                      label: "Edit Future Milestones"
+                    entities:
+                      - entity: input_datetime.milestone_visa_application
+                        name: "Visa Application"
+                        icon: mdi:file-document-edit
+                      
+                      - entity: input_datetime.milestone_visa_approval
+                        name: "Visa Approval"
+                        icon: mdi:check-decagram
+                      
+                      - entity: input_datetime.milestone_moved_in_together
+                        name: "Moved In Together"
+                        icon: mdi:home-heart
+                      
+                      - entity: input_datetime.milestone_first_home_together
+                        name: "First Home Together"
+                        icon: mdi:home-import-outline
+                      
+                      - entity: input_datetime.milestone_forever_home_purchase
+                        name: "Forever Home Purchase"
+                        icon: mdi:home-city
